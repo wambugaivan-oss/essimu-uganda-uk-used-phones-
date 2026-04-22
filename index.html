@@ -315,6 +315,67 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:60px 6% 
 @media(max-width:768px){.nav-search{display:none;}.nav-right .nav-wa,.nav-right .theme-toggle{display:none;}.nav-ham{display:flex;}.hero h1{letter-spacing:-1px;}.hero-stats{gap:20px;}.section{padding:60px 6%;}.products-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;}.cat-grid{grid-template-columns:repeat(3,1fr);}}
 @media(max-width:480px){.footer-grid{grid-template-columns:1fr;}.hero{padding:80px 6% 60px;}.hero-stats{flex-wrap:wrap;gap:14px;}.modal-specs-grid{grid-template-columns:1fr;}.cat-grid{grid-template-columns:repeat(2,1fr);}}
 /* ═══════════════════════════════════════════
+
+/* ═══════════════════════════════════════════
+   PRODUCT IMAGES — real photo system
+   ═══════════════════════════════════════════ */
+.prod-img-wrap{
+  height:200px;background:var(--bg3);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.prod-img-wrap img{
+  width:100%;height:100%;
+  object-fit:contain;         /* show full phone, not cropped */
+  object-position:center;
+  transition:transform .4s;
+  padding:12px;
+  background:var(--bg3);
+}
+.prod-card:hover .prod-img-wrap img{transform:scale(1.06);}
+.prod-img-fallback{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:8px;width:100%;height:100%;
+  padding:16px;
+}
+.prod-img-fallback-icon{
+  font-size:3.5rem;
+  filter:drop-shadow(0 4px 12px rgba(0,0,0,.2));
+}
+.prod-img-fallback-name{
+  font-family:var(--font-display);
+  font-size:.65rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:1px;
+  color:var(--text3);text-align:center;
+  line-height:1.3;
+}
+/* Modal image */
+.modal-img-side{
+  background:var(--bg3);
+  border-radius:20px 0 0 20px;
+  min-height:380px;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.modal-img-side img{
+  width:100%;height:100%;
+  object-fit:contain;padding:24px;
+  border-radius:20px 0 0 20px;
+}
+/* ── FIX: product cards always visible (dynamic render bypasses IntersectionObserver) ── */
+.prod-card, .prod-body, .prod-name, .prod-brand, .prod-specs,
+.prod-price, .prod-img-wrap, .prod-img-fallback,
+.prod-img-fallback-icon, .prod-img-fallback-name {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+.prod-card { color: var(--text); }
+.prod-name { color: var(--text); font-family: var(--font-display); }
+.prod-brand { color: var(--blue); }
+.prod-specs { color: var(--text3); }
+.prod-price { color: var(--text); }
+.prod-img-fallback-name { color: var(--text3); }
+
 </style>
 
 </head>
@@ -426,7 +487,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:60px 6% 
 
 
 <!-- CATEGORIES -->
-<section class="section reveal" id="categories">
+<section class="section" id="categories">
   <div class="section-head">
     <div><div class="section-eyebrow">Browse by Category</div><h2 class="section-title">Shop by Brand</h2></div>
   </div>
@@ -443,7 +504,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:60px 6% 
 </section>
 
 <!-- PRODUCTS -->
-<section class="section reveal" id="products" style="padding-top:0">
+<section class="section" id="products" style="padding-top:0">
   <div class="section-head">
     <div><div class="section-eyebrow">Featured Inventory</div><h2 class="section-title">Available Phones</h2><p class="section-sub">UK used and brand new phones at the most competitive prices in Kampala Uganda.</p></div>
   </div>
@@ -883,6 +944,343 @@ function applyFilters() {
 // ═══════════════════════════════════════════
 // RENDER PRODUCTS
 // ═══════════════════════════════════════════
+
+// ═══════════════════════════════════════════
+// PRODUCT IMAGE MAP — GSMArena CDN + fallback
+// ═══════════════════════════════════════════
+const IMAGE_MAP = {
+  101: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s7-edge.jpg",
+  102: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s7.jpg",
+  103: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s8.jpg",
+  104: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s8plus.jpg",
+  105: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s9.jpg",
+  106: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s9plus.jpg",
+  107: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s10e.jpg",
+  108: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s10.jpg",
+  109: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s10plus.jpg",
+  110: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s10-5g.jpg",
+  111: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s20.jpg",
+  112: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s20plus-5g.jpg",
+  113: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s20-ultra-5g.jpg",
+  114: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s20-fe.jpg",
+  115: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s21-5g.jpg",
+  116: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s21-plus-5g.jpg",
+  117: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s21-ultra-5g.jpg",
+  118: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s21-fe-5g.jpg",
+  119: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s22-5g.jpg",
+  120: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s22-plus-5g.jpg",
+  121: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s22-ultra-5g.jpg",
+  122: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s23.jpg",
+  123: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s23-plus.jpg",
+  124: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s23-ultra.jpg",
+  125: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s23-fe.jpg",
+  126: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s24.jpg",
+  127: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s24-plus.jpg",
+  128: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s24-ultra.jpg",
+  129: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s24-ultra.jpg",
+  130: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s24-fe.jpg",
+  131: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s25.jpg",
+  132: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s25-plus.jpg",
+  133: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s25-ultra-sm-s938.jpg",
+  134: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s25-edge.jpg",
+  135: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s26.jpg",
+  136: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s26-plus.jpg",
+  137: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s26-ultra.jpg",
+  201: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-x.jpg",
+  202: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-xs.jpg",
+  203: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-xs-max.jpg",
+  204: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-xr.jpg",
+  205: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-11.jpg",
+  206: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-11-pro.jpg",
+  207: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-11-pro-max.jpg",
+  208: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-12-mini.jpg",
+  209: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-12.jpg",
+  210: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-12-pro.jpg",
+  211: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-12-pro-max.jpg",
+  212: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-13-mini.jpg",
+  213: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-13.jpg",
+  214: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-13-pro.jpg",
+  215: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-13-pro-max.jpg",
+  216: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-14.jpg",
+  217: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-14-plus.jpg",
+  218: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-14-pro.jpg",
+  219: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-14-pro-max.jpg",
+  220: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-15.jpg",
+  221: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-15-plus.jpg",
+  222: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-15-pro.jpg",
+  223: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-15-pro-max.jpg",
+  224: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-15-pro-max.jpg",
+  225: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-16.jpg",
+  226: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-16-plus.jpg",
+  227: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-16-pro.jpg",
+  228: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-16-pro-max.jpg",
+  229: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-16e.jpg",
+  230: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-17.jpg",
+  231: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-17-air.jpg",
+  232: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-17-pro.jpg",
+  233: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-17-pro-max.jpg",
+  301: "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-3.jpg",
+  302: "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-3-xl.jpg",
+  303: "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-3a.jpg",
+  304: "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-4.jpg",
+  305: "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-4-xl.jpg",
+  306: "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-4a.jpg",
+  307: "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-5.jpg",
+  308: "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-5a.jpg",
+  309: "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-6.jpg",
+  310: "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-6-pro.jpg",
+  311: "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-6a.jpg",
+  312: "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-7.jpg",
+  313: "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-7-pro.jpg",
+  314: "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-7a.jpg",
+  315: "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-8.jpg",
+  316: "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-8-pro.jpg",
+  317: "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-8a.jpg",
+  318: "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-9.jpg",
+  319: "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-9-pro.jpg",
+  320: "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-9-pro-xl.jpg",
+  321: "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-9-pro-fold.jpg",
+  322: "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-10.jpg",
+  323: "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-10-pro.jpg",
+  324: "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-10-pro-xl.jpg",
+  401: "https://fdn2.gsmarena.com/vv/bigpic/oppo-find-x8-pro.jpg",
+  402: "https://fdn2.gsmarena.com/vv/bigpic/oppo-reno12-pro.jpg",
+  403: "https://fdn2.gsmarena.com/vv/bigpic/oppo-a3-pro.jpg",
+  404: "https://fdn2.gsmarena.com/vv/bigpic/xiaomi-redmi-note-14-pro-plus.jpg",
+  405: "https://fdn2.gsmarena.com/vv/bigpic/xiaomi-redmi-14c.jpg",
+  406: "https://fdn2.gsmarena.com/vv/bigpic/tecno-phantom-v-fold2.jpg",
+  407: "https://fdn2.gsmarena.com/vv/bigpic/infinix-note-40-pro-plus.jpg",
+  408: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-buds3-pro.jpg",
+  409: "https://fdn2.gsmarena.com/vv/bigpic/samsung-45w-power-adapter.jpg",
+  410: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s24.jpg",
+};
+
+function getProductImg(p) {
+  return IMAGE_MAP[p.id] || null;
+}
+
+
+// ── Image helper functions (keeps template literals clean) ──
+function buildProductImg(p) {
+  const url = IMAGE_MAP[p.id];
+  if (!url) {
+    return '<div class="prod-img-fallback">' +
+      '<div class="prod-img-fallback-icon">' + p.icon + '</div>' +
+      '<div class="prod-img-fallback-name">' + p.brand + '<br>' + p.name + '</div>' +
+    '</div>';
+  }
+  return '<img' +
+    ' src="' + url + '"' +
+    ' alt="' + p.brand + ' ' + p.name + ' price Uganda"' +
+    ' loading="lazy"' +
+    ' decoding="async"' +
+    ' referrerpolicy="no-referrer"' +
+    ' onerror="imgFallback(this)"' +
+    ' data-icon="' + p.icon + '"' +
+    ' data-brand="' + p.brand.replace(/"/g,"") + '"' +
+    ' data-name="' + p.name.replace(/"/g,"") + '"' +
+  '/>';
+}
+
+function buildModalImg(p) {
+  const url = IMAGE_MAP[p.id];
+  if (!url) {
+    return '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:16px;padding:24px;">' +
+      '<span style="font-size:5rem">' + p.icon + '</span>' +
+      '<span style="font-size:.85rem;color:var(--text3);text-align:center;font-weight:600">' + p.brand + ' ' + p.name + '</span>' +
+    '</div>';
+  }
+  return '<img' +
+    ' src="' + url + '"' +
+    ' alt="' + p.brand + ' ' + p.name + ' official image"' +
+    ' loading="lazy"' +
+    ' decoding="async"' +
+    ' referrerpolicy="no-referrer"' +
+    ' onerror="imgFallback(this)"' +
+    ' data-icon="' + p.icon + '"' +
+    ' data-brand="' + p.brand.replace(/"/g,"") + '"' +
+    ' data-name="' + p.name.replace(/"/g,"") + '"' +
+  '/>';
+}
+
+function imgFallback(img) {
+  var icon  = img.dataset.icon  || '📱';
+  var brand = img.dataset.brand || '';
+  var name  = img.dataset.name  || '';
+  var wrap = img.parentElement;
+  if (!wrap) return;
+  wrap.innerHTML =
+    '<div class="prod-img-fallback">' +
+      '<div class="prod-img-fallback-icon">' + icon + '</div>' +
+      '<div class="prod-img-fallback-name">' + brand + '<br>' + name + '</div>' +
+    '</div>';
+}
+
+const WIKI_TITLES = {
+  101: "Samsung Galaxy S7",
+  102: "Samsung Galaxy S7",
+  103: "Samsung Galaxy S8",
+  104: "Samsung Galaxy S8",
+  105: "Samsung Galaxy S9",
+  106: "Samsung Galaxy S9",
+  107: "Samsung Galaxy S10",
+  108: "Samsung Galaxy S10",
+  109: "Samsung Galaxy S10",
+  110: "Samsung Galaxy S10",
+  111: "Samsung Galaxy S20",
+  112: "Samsung Galaxy S20",
+  113: "Samsung Galaxy S20",
+  114: "Samsung Galaxy S20 FE",
+  115: "Samsung Galaxy S21",
+  116: "Samsung Galaxy S21",
+  117: "Samsung Galaxy S21",
+  118: "Samsung Galaxy S21 FE",
+  119: "Samsung Galaxy S22",
+  120: "Samsung Galaxy S22",
+  121: "Samsung Galaxy S22 Ultra",
+  122: "Samsung Galaxy S23",
+  123: "Samsung Galaxy S23",
+  124: "Samsung Galaxy S23 Ultra",
+  125: "Samsung Galaxy S23 FE",
+  126: "Samsung Galaxy S24",
+  127: "Samsung Galaxy S24",
+  128: "Samsung Galaxy S24 Ultra",
+  129: "Samsung Galaxy S24 Ultra",
+  130: "Samsung Galaxy S24 FE",
+  131: "Samsung Galaxy S25",
+  132: "Samsung Galaxy S25",
+  133: "Samsung Galaxy S25",
+  134: "Samsung Galaxy S25 Edge",
+  135: "Samsung Galaxy S26",
+  136: "Samsung Galaxy S26",
+  137: "Samsung Galaxy S26",
+  201: "iPhone X",
+  202: "iPhone XS",
+  203: "iPhone XS",
+  204: "iPhone XR",
+  205: "iPhone 11",
+  206: "iPhone 11 Pro",
+  207: "iPhone 11 Pro",
+  208: "iPhone 12",
+  209: "iPhone 12",
+  210: "iPhone 12 Pro",
+  211: "iPhone 12 Pro",
+  212: "iPhone 13",
+  213: "iPhone 13",
+  214: "iPhone 13 Pro",
+  215: "iPhone 13 Pro",
+  216: "iPhone 14",
+  217: "iPhone 14 Plus",
+  218: "iPhone 14 Pro",
+  219: "iPhone 14 Pro",
+  220: "iPhone 15",
+  221: "iPhone 15 Plus",
+  222: "iPhone 15 Pro",
+  223: "iPhone 15 Pro",
+  224: "iPhone 15 Pro",
+  225: "iPhone 16",
+  226: "iPhone 16 Plus",
+  227: "iPhone 16 Pro",
+  228: "iPhone 16 Pro",
+  229: "iPhone 16e",
+  230: "iPhone 17",
+  231: "iPhone 17 Air",
+  232: "iPhone 17 Pro",
+  233: "iPhone 17 Pro",
+  301: "Google Pixel 3",
+  302: "Google Pixel 3 XL",
+  303: "Google Pixel 3a",
+  304: "Google Pixel 4",
+  305: "Google Pixel 4 XL",
+  306: "Google Pixel 4a",
+  307: "Google Pixel 5",
+  308: "Google Pixel 5a",
+  309: "Google Pixel 6",
+  310: "Google Pixel 6 Pro",
+  311: "Google Pixel 6a",
+  312: "Google Pixel 7",
+  313: "Google Pixel 7 Pro",
+  314: "Google Pixel 7a",
+  315: "Google Pixel 8",
+  316: "Google Pixel 8 Pro",
+  317: "Google Pixel 8a",
+  318: "Google Pixel 9",
+  319: "Google Pixel 9 Pro",
+  320: "Google Pixel 9 Pro XL",
+  321: "Google Pixel 9 Pro Fold",
+  322: "Google Pixel 10",
+  323: "Google Pixel 10 Pro",
+  324: "Google Pixel 10 Pro XL",
+  401: "Oppo Find X8 Pro",
+  402: "Oppo Reno 12",
+  403: "Oppo A3",
+  404: "Redmi Note 14 Pro+",
+  405: "Redmi 14C",
+  406: "Tecno Phantom V Fold2",
+  407: "Infinix Note 40 Pro+",
+};
+
+
+// ═══════════════════════════════════════════════════════════════
+// WIKIPEDIA IMAGE LOADER
+// Uses Wikipedia's open MediaWiki API (no key, CORS-enabled)
+// Fetches real Wikimedia Commons thumbnails — free & hotlink-safe
+// Falls back to GSMArena CDN → styled emoji card
+// ═══════════════════════════════════════════════════════════════
+let _wikiLoaded = false;
+
+async function loadWikiImages() {
+  if (_wikiLoaded) return;
+  // Check session cache first
+  try {
+    const cached = sessionStorage.getItem('essimu_imgs');
+    if (cached) {
+      const obj = JSON.parse(cached);
+      Object.assign(IMAGE_MAP, obj);
+      _wikiLoaded = true;
+      renderProducts();
+      return;
+    }
+  } catch(e) {}
+
+  // Collect unique titles grouped: title → [productIds]
+  const titleToIds = {};
+  Object.entries(WIKI_TITLES).forEach(([id, title]) => {
+    if (!titleToIds[title]) titleToIds[title] = [];
+    titleToIds[title].push(Number(id));
+  });
+  const allTitles = Object.keys(titleToIds);
+
+  const newMap = {};
+  // Batch 45 titles per API call
+  for (let i = 0; i < allTitles.length; i += 45) {
+    const batch = allTitles.slice(i, i + 45);
+    const qs = batch.map(t => encodeURIComponent(t)).join('|');
+    const url = 'https://en.wikipedia.org/w/api.php?action=query&titles=' + qs +
+                '&prop=pageimages&pithumbsize=600&format=json&origin=*';
+    try {
+      const resp = await fetch(url, { signal: AbortSignal.timeout(8000) });
+      const data = await resp.json();
+      const pages = data.query && data.query.pages ? data.query.pages : {};
+      Object.values(pages).forEach(page => {
+        if (!page.thumbnail) return;
+        // Match page title back to IDs (handle spaces/underscores)
+        const normTitle = (page.title || '').replace(/_/g,' ');
+        const ids = titleToIds[normTitle] || titleToIds[page.title] || [];
+        ids.forEach(id => { newMap[id] = page.thumbnail.source; });
+      });
+    } catch(e) {
+      console.log('Wiki batch failed:', e.message);
+    }
+  }
+
+  // Merge and cache
+  Object.assign(IMAGE_MAP, newMap);
+  try { sessionStorage.setItem('essimu_imgs', JSON.stringify(newMap)); } catch(e){}
+  _wikiLoaded = true;
+  renderProducts(); // smooth re-render with real images
+}
+
 function renderProducts() {
   const grid = document.getElementById('productsGrid');
   if (!filteredProducts.length) {
@@ -893,9 +1291,7 @@ function renderProducts() {
     <div class="prod-card" onclick="openModal(${p.id})">
       <div class="prod-card-badge badge-${p.badge === 'used' ? 'used' : p.badge === 'hot' ? 'hot' : 'new'}">${p.cond === 'UK Used' ? '🇬🇧 UK Used' : p.badge === 'hot' ? '🔥 Hot' : '✨ Brand New'}</div>
       <button class="prod-card-wish" onclick="event.stopPropagation();toggleWish(this)" title="Save">🤍</button>
-      <div class="prod-img-wrap">
-        <div class="prod-img-placeholder">${p.icon}</div>
-      </div>
+      <div class="prod-img-wrap">${buildProductImg(p)}</div>
       <div class="prod-body">
         <div class="prod-brand">${p.brand}</div>
         <div class="prod-name">${p.name}</div>
@@ -934,7 +1330,7 @@ function openModal(id) {
   if (!p) return;
   const specs = p.specs.split('·').map(s => s.trim());
   document.getElementById('modalInner').innerHTML = `
-    <div class="modal-img-side" style="display:flex;align-items:center;justify-content:center;font-size:7rem">${p.icon}</div>
+    <div class="modal-img-side">${buildModalImg(p)}</div>
     <div class="modal-info-side">
       <button class="modal-close" onclick="closeModal()">✕</button>
       <div class="modal-brand">${p.brand}</div>
