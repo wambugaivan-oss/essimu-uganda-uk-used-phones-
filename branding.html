@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Business DP</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@500;600;700&family=Barlow+Condensed:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Barlow Condensed', sans-serif;
+  }
+
+  .card {
+    width: 500px;
+    height: 500px;
+    background: #0a0a0a;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Background glow effects */
+  .card::before {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(0, 120, 255, 0.12) 0%, transparent 70%);
+    top: -50px;
+    left: -50px;
+    border-radius: 50%;
+  }
+  .card::after {
+    content: '';
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(100, 220, 100, 0.08) 0%, transparent 70%);
+    bottom: -30px;
+    right: -30px;
+    border-radius: 50%;
+  }
+
+  /* Corner decorations */
+  .corner {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    border-color: rgba(255,255,255,0.25);
+    border-style: solid;
+  }
+  .corner-tl { top: 18px; left: 18px; border-width: 2px 0 0 2px; }
+  .corner-tr { top: 18px; right: 18px; border-width: 2px 2px 0 0; }
+  .corner-bl { bottom: 18px; left: 18px; border-width: 0 0 2px 2px; }
+  .corner-br { bottom: 18px; right: 18px; border-width: 0 2px 2px 0; }
+
+  /* Phone silhouettes */
+  .phones-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    margin-bottom: 22px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .phone {
+    position: relative;
+    border-radius: 14px;
+    background: linear-gradient(160deg, #1e1e1e 0%, #111 100%);
+    border: 1.5px solid rgba(255,255,255,0.12);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .phone.tall { width: 52px; height: 92px; }
+  .phone.short { width: 48px; height: 80px; }
+
+  .phone-screen {
+    width: calc(100% - 6px);
+    height: calc(100% - 10px);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  .phone.samsung .phone-screen {
+    background: linear-gradient(135deg, #1a2a4a 0%, #0d1b2a 100%);
+  }
+  .phone.apple .phone-screen {
+    background: linear-gradient(135deg, #1c1c1e 0%, #0f0f10 100%);
+  }
+
+  .phone-notch {
+    position: absolute;
+    top: 5px;
+    width: 16px;
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+  }
+
+  /* Brand label on phone */
+  .brand-tag {
+    position: absolute;
+    bottom: 6px;
+    font-size: 6.5px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.4);
+  }
+
+  /* Divider line */
+  .divider {
+    width: 320px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    margin: 10px 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Main content */
+  .content {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .brand-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 4px;
+  }
+
+  .brand-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    line-height: 1;
+    letter-spacing: 3px;
+  }
+
+  .brand-name.samsung {
+    color: #fff;
+  }
+
+  .brand-name.apple {
+    color: #fff;
+  }
+
+  .brand-separator {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: center;
+  }
+  .brand-separator span {
+    display: block;
+    width: 3px;
+    height: 3px;
+    background: rgba(255,255,255,0.35);
+    border-radius: 50%;
+  }
+
+  .sub-heading {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 6px;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .uganda-tag {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 5px;
+    color: rgba(255,255,255,0.35);
+    text-transform: uppercase;
+    margin-top: 12px;
+  }
+
+  /* Bottom tagline */
+  .tagline {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+  }
+  .tagline-dot {
+    width: 3px;
+    height: 3px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 50%;
+  }
+
+  .address {
+    margin-top: 8px;
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.2);
+    text-transform: uppercase;
+  }
+
+  /* Animated shimmer on brand names */
+  @keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+  .brand-name {
+    background: linear-gradient(90deg, #ccc 0%, #fff 40%, #ccc 60%, #fff 80%, #ccc 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 4s linear infinite;
+  }
+
+  /* Subtle scan line */
+  .scanline {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(255,255,255,0.012) 3px,
+      rgba(255,255,255,0.012) 4px
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="scanline"></div>
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div>
+  <div class="corner corner-br"></div>
+
+  <!-- Phone silhouettes -->
+  <div class="phones-row">
+    <div class="phone short samsung">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">📱</div>
+      <div class="brand-tag">SAMSUNG</div>
+    </div>
+    <div class="phone tall apple">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">📱</div>
+      <div class="brand-tag">APPLE</div>
+    </div>
+    <div class="phone short samsung">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">📱</div>
+      <div class="brand-tag">SAMSUNG</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Brand names -->
+  <div class="content">
+    <div class="brand-line">
+      <div class="brand-name samsung">SAMSUNG</div>
+      <div class="brand-separator">
+        <span></span><span></span><span></span>
+      </div>
+      <div class="brand-name apple">APPLE</div>
+    </div>
+    <div class="sub-heading">Products · Uganda</div>
+  </div>
+
+  <div class="divider" style="margin-top:14px;"></div>
+
+  <div class="tagline">
+    <span>WE SELL</span>
+    <div class="tagline-dot"></div>
+    <span>WE REPAIR</span>
+    <div class="tagline-dot"></div>
+    <span>WE RESTORE</span>
+  </div>
+
+  <div class="address">William Street, Kampala</div>
+</div>
+</body>
+</html>
