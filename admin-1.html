@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Essimu Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+:root{
+  --bg:#0d0d0f;--bg2:#131316;--surface:#1e1e24;--surface2:#26262d;
+  --border:rgba(255,255,255,.1);--text:#f0f0f4;--text2:#a0a0b0;--text3:#6a6a7a;
+  --blue:#3b82f6;--green:#22c55e;--red:#ef4444;--gold:#f59e0b;
+  --radius:10px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);}
+input,select,button{font-family:inherit;font-size:.9rem;}
+input,select{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:8px;outline:none;}
+input:focus,select:focus{border-color:var(--blue);}
+button{cursor:pointer;border:none;border-radius:8px;padding:9px 16px;font-weight:600;}
+.btn-primary{background:var(--blue);color:white;}
+.btn-green{background:var(--green);color:white;}
+.btn-red{background:var(--red);color:white;}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text);}
+
+/* Login screen */
+#loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+.login-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:32px;width:100%;max-width:360px;}
+.login-box h1{font-size:1.3rem;margin-bottom:20px;}
+.login-box input{width:100%;margin-bottom:12px;}
+.login-box button{width:100%;padding:12px;}
+.login-error{color:var(--red);font-size:.85rem;margin-top:10px;display:none;}
+
+/* Admin shell */
+#adminScreen{display:none;}
+header{background:var(--bg2);border-bottom:1px solid var(--border);padding:16px 5%;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;}
+header h1{font-size:1.1rem;}
+header .stats{font-size:.8rem;color:var(--text3);}
+main{padding:20px 5% 60px;max-width:1100px;margin:0 auto;}
+
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;align-items:center;}
+.toolbar input, .toolbar select{flex:1;min-width:140px;}
+.toolbar button{flex-shrink:0;}
+
+table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:10px;overflow:hidden;font-size:.85rem;}
+thead th{text-align:left;padding:10px 12px;background:var(--surface2);color:var(--text3);font-size:.7rem;text-transform:uppercase;letter-spacing:.5px;}
+tbody td{padding:10px 12px;border-top:1px solid var(--border);}
+tbody tr:hover{background:var(--surface2);}
+.pill{padding:3px 9px;border-radius:100px;font-size:.7rem;font-weight:700;display:inline-block;}
+.pill-new{background:rgba(34,197,94,.15);color:var(--green);}
+.pill-used{background:rgba(245,158,11,.15);color:var(--gold);}
+.pill-inactive{background:rgba(239,68,68,.15);color:var(--red);}
+.row-actions{display:flex;gap:6px;}
+.row-actions button{padding:5px 10px;font-size:.75rem;}
+
+/* Modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--surface);border-radius:14px;padding:24px;width:100%;max-width:480px;margin-top:40px;}
+.modal h2{font-size:1.1rem;margin-bottom:16px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.form-row.full{grid-template-columns:1fr;}
+.form-row label{grid-column:1/-1;font-size:.75rem;color:var(--text3);margin-bottom:2px;}
+.form-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px;}
+.checkbox-row{display:flex;gap:16px;margin:10px 0;}
+.checkbox-row label{display:flex;align-items:center;gap:6px;font-size:.85rem;color:var(--text2);}
+
+.loading{text-align:center;padding:40px;color:var(--text3);}
+@media(max-width:700px){
+  table, thead, tbody, tr{display:block;}
+  thead{display:none;}
+  tbody tr{padding:10px;border-top:1px solid var(--border);}
+  tbody td{display:flex;justify-content:space-between;border:none;padding:4px 0;}
+  tbody td:before{content:attr(data-label);color:var(--text3);font-size:.7rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== LOGIN ===================== -->
+<div id="loginScreen">
+  <div class="login-box">
+    <h1>Essimu Admin</h1>
+    <input type="email" id="loginEmail" placeholder="Email" autocomplete="username">
+    <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
+    <button class="btn-primary" id="loginBtn">Log In</button>
+    <div class="login-error" id="loginError"></div>
+  </div>
+</div>
+
+<!-- ===================== ADMIN ===================== -->
+<div id="adminScreen">
+  <header>
+    <h1>Essimu Admin</h1>
+    <div style="display:flex;align-items:center;gap:16px;">
+      <span class="stats" id="statsText">—</span>
+      <button class="btn-outline" id="logoutBtn">Log Out</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="toolbar">
+      <input type="text" id="searchInput" placeholder="Search brand or model...">
+      <select id="brandFilter"><option value="">All Brands</option></select>
+      <select id="statusFilter">
+        <option value="">All Status</option>
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+      </select>
+      <button class="btn-green" id="addProductBtn">+ Add Product</button>
+    </div>
+
+    <div id="tableWrap">
+      <div class="loading">Loading products…</div>
+    </div>
+  </main>
+</div>
+
+<!-- ===================== PRODUCT MODAL ===================== -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h2 id="modalTitle">Add Product</h2>
+    <input type="hidden" id="f_id">
+
+    <div class="form-row">
+      <label>Brand</label>
+      <input type="text" id="f_brand" placeholder="Samsung">
+      <input type="text" id="f_model" placeholder="Model, e.g. Galaxy A05s">
+    </div>
+    <div class="form-row">
+      <label>Category / Condition</label>
+      <input type="text" id="f_category" placeholder="Phone">
+      <select id="f_condition">
+        <option value="Brand New">Brand New</option>
+        <option value="UK Used">UK Used</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>Storage / RAM</label>
+      <input type="text" id="f_storage" placeholder="128GB">
+      <input type="text" id="f_ram" placeholder="8GB">
+    </div>
+    <div class="form-row">
+      <label>Colour / Series</label>
+      <input type="text" id="f_colour" placeholder="Black (optional)">
+      <input type="text" id="f_series" placeholder="A Series (optional)">
+    </div>
+    <div class="form-row">
+      <label>Price (UGX)</label>
+      <input type="number" id="f_price" placeholder="850000">
+      <input type="number" id="f_price_max" placeholder="Max price (optional)">
+    </div>
+    <div class="form-row">
+      <label>Wholesale price / MOQ</label>
+      <input type="number" id="f_wholesale_price" placeholder="Optional">
+      <input type="number" id="f_wholesale_min_qty" placeholder="Optional">
+    </div>
+    <div class="form-row">
+      <label>Stock / Image URL</label>
+      <input type="number" id="f_stock" placeholder="0">
+      <input type="text" id="f_image_url" placeholder="Optional image URL">
+    </div>
+    <div class="form-row full">
+      <label>Specs / description note</label>
+      <input type="text" id="f_specs" placeholder="Free text shown under model name">
+    </div>
+
+    <div class="checkbox-row">
+      <label><input type="checkbox" id="f_featured"> Featured</label>
+      <label><input type="checkbox" id="f_active" checked> Active (visible on site)</label>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn-outline" id="modalCancelBtn">Cancel</button>
+      <button class="btn-primary" id="modalSaveBtn">Save</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { supabase } from './assets/js/supabase.js';
+
+const loginScreen = document.getElementById('loginScreen');
+const adminScreen = document.getElementById('adminScreen');
+const loginError  = document.getElementById('loginError');
+
+let ALL_PRODUCTS = [];
+
+// ---------- AUTH ----------
+async function checkSession() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session) {
+    showAdmin();
+  } else {
+    showLogin();
+  }
+}
+
+function showLogin() {
+  loginScreen.style.display = 'flex';
+  adminScreen.style.display = 'none';
+}
+
+function showAdmin() {
+  loginScreen.style.display = 'none';
+  adminScreen.style.display = 'block';
+  loadProducts();
+}
+
+document.getElementById('loginBtn').addEventListener('click', async () => {
+  loginError.style.display = 'none';
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) {
+    loginError.textContent = error.message;
+    loginError.style.display = 'block';
+    return;
+  }
+  showAdmin();
+});
+
+document.getElementById('logoutBtn').addEventListener('click', async () => {
+  await supabase.auth.signOut();
+  showLogin();
+});
+
+// ---------- LOAD & RENDER ----------
+async function loadProducts() {
+  document.getElementById('tableWrap').innerHTML = '<div class="loading">Loading products…</div>';
+  const { data, error } = await supabase
+    .from('products')
+    .select('*')
+    .order('brand')
+    .order('model');
+
+  if (error) {
+    document.getElementById('tableWrap').innerHTML = `<div class="loading">Error loading products: ${error.message}</div>`;
+    return;
+  }
+  ALL_PRODUCTS = data;
+  populateBrandFilter();
+  renderTable();
+}
+
+function populateBrandFilter() {
+  const select = document.getElementById('brandFilter');
+  const brands = [...new Set(ALL_PRODUCTS.map(p => p.brand))].sort();
+  const current = select.value;
+  select.innerHTML = '<option value="">All Brands</option>' +
+    brands.map(b => `<option value="${b}">${b}</option>`).join('');
+  select.value = current;
+}
+
+function fmtUGX(n) { return n == null ? '' : 'UGX ' + Number(n).toLocaleString('en-US'); }
+
+function renderTable() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const brandF = document.getElementById('brandFilter').value;
+  const statusF = document.getElementById('statusFilter').value;
+
+  let list = ALL_PRODUCTS.filter(p => {
+    if (search && !(`${p.brand} ${p.model}`.toLowerCase().includes(search))) return false;
+    if (brandF && p.brand !== brandF) return false;
+    if (statusF === 'active' && !p.active) return false;
+    if (statusF === 'inactive' && p.active) return false;
+    return true;
+  });
+
+  document.getElementById('statsText').textContent =
+    `${ALL_PRODUCTS.length} total · ${ALL_PRODUCTS.filter(p => p.active).length} active`;
+
+  if (list.length === 0) {
+    document.getElementById('tableWrap').innerHTML = '<div class="loading">No products match.</div>';
+    return;
+  }
+
+  document.getElementById('tableWrap').innerHTML = `
+    <table>
+      <thead><tr>
+        <th>Brand / Model</th><th>Condition</th><th>Price</th><th>Stock</th><th>Status</th><th></th>
+      </tr></thead>
+      <tbody>
+        ${list.map(p => `
+          <tr>
+            <td data-label="Product"><strong>${p.brand}</strong> ${p.model}</td>
+            <td data-label="Condition"><span class="pill ${p.condition === 'Brand New' ? 'pill-new' : 'pill-used'}">${p.condition}</span></td>
+            <td data-label="Price">${fmtUGX(p.price)}${p.price_max ? ' – ' + fmtUGX(p.price_max) : ''}</td>
+            <td data-label="Stock">${p.stock}</td>
+            <td data-label="Status">${p.active ? '<span class="pill pill-new">Active</span>' : '<span class="pill pill-inactive">Inactive</span>'}</td>
+            <td data-label="Actions">
+              <div class="row-actions">
+                <button class="btn-outline" onclick="window.editProduct(${p.id})">Edit</button>
+                <button class="btn-outline" onclick="window.toggleActive(${p.id})">${p.active ? 'Deactivate' : 'Activate'}</button>
+                <button class="btn-red" onclick="window.deleteProduct(${p.id})">Delete</button>
+              </div>
+            </td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+document.getElementById('searchInput').addEventListener('input', renderTable);
+document.getElementById('brandFilter').addEventListener('change', renderTable);
+document.getElementById('statusFilter').addEventListener('change', renderTable);
+
+// ---------- MODAL / FORM ----------
+const modalOverlay = document.getElementById('modalOverlay');
+const fields = ['id','brand','model','category','condition','storage','ram','colour','series',
+  'price','price_max','wholesale_price','wholesale_min_qty','stock','image_url','specs'];
+
+function openModal(product = null) {
+  document.getElementById('modalTitle').textContent = product ? 'Edit Product' : 'Add Product';
+  fields.forEach(f => {
+    const el = document.getElementById('f_' + f);
+    if (el) el.value = product && product[f] != null ? product[f] : '';
+  });
+  document.getElementById('f_condition').value = product ? product.condition : 'Brand New';
+  document.getElementById('f_featured').checked = product ? !!product.featured : false;
+  document.getElementById('f_active').checked = product ? !!product.active : true;
+  modalOverlay.classList.add('open');
+}
+
+function closeModal() { modalOverlay.classList.remove('open'); }
+
+document.getElementById('addProductBtn').addEventListener('click', () => openModal());
+document.getElementById('modalCancelBtn').addEventListener('click', closeModal);
+modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
+
+document.getElementById('modalSaveBtn').addEventListener('click', async () => {
+  const id = document.getElementById('f_id').value;
+  const payload = {
+    brand: document.getElementById('f_brand').value.trim(),
+    model: document.getElementById('f_model').value.trim(),
+    category: document.getElementById('f_category').value.trim() || 'Phone',
+    condition: document.getElementById('f_condition').value,
+    storage: document.getElementById('f_storage').value.trim() || null,
+    ram: document.getElementById('f_ram').value.trim() || null,
+    colour: document.getElementById('f_colour').value.trim() || null,
+    series: document.getElementById('f_series').value.trim() || null,
+    price: Number(document.getElementById('f_price').value) || 0,
+    price_max: document.getElementById('f_price_max').value ? Number(document.getElementById('f_price_max').value) : null,
+    wholesale_price: document.getElementById('f_wholesale_price').value ? Number(document.getElementById('f_wholesale_price').value) : null,
+    wholesale_min_qty: document.getElementById('f_wholesale_min_qty').value ? Number(document.getElementById('f_wholesale_min_qty').value) : null,
+    stock: Number(document.getElementById('f_stock').value) || 0,
+    image_url: document.getElementById('f_image_url').value.trim() || null,
+    specs: document.getElementById('f_specs').value.trim() || null,
+    featured: document.getElementById('f_featured').checked,
+    active: document.getElementById('f_active').checked
+  };
+
+  if (!payload.brand || !payload.model) {
+    alert('Brand and Model are required.');
+    return;
+  }
+
+  let error;
+  if (id) {
+    ({ error } = await supabase.from('products').update(payload).eq('id', id));
+  } else {
+    ({ error } = await supabase.from('products').insert(payload));
+  }
+
+  if (error) {
+    alert('Error saving: ' + error.message);
+    return;
+  }
+  closeModal();
+  loadProducts();
+});
+
+// ---------- ROW ACTIONS (exposed globally for inline onclick) ----------
+window.editProduct = (id) => {
+  const product = ALL_PRODUCTS.find(p => p.id === id);
+  if (product) openModal(product);
+};
+
+window.toggleActive = async (id) => {
+  const product = ALL_PRODUCTS.find(p => p.id === id);
+  if (!product) return;
+  const { error } = await supabase.from('products').update({ active: !product.active }).eq('id', id);
+  if (error) { alert('Error: ' + error.message); return; }
+  loadProducts();
+};
+
+window.deleteProduct = async (id) => {
+  const product = ALL_PRODUCTS.find(p => p.id === id);
+  if (!product) return;
+  if (!confirm(`Permanently delete "${product.brand} ${product.model}"? This cannot be undone.`)) return;
+  const { error } = await supabase.from('products').delete().eq('id', id);
+  if (error) { alert('Error: ' + error.message); return; }
+  loadProducts();
+};
+
+// ---------- INIT ----------
+checkSession();
+</script>
+</body>
+</html>
