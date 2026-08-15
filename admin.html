@@ -156,9 +156,17 @@ tbody tr:hover{background:var(--surface2);}
       <input type="number" id="f_wholesale_min_qty" placeholder="Optional">
     </div>
     <div class="form-row">
-      <label>Stock / Image URL</label>
+      <label>Stock</label>
       <input type="number" id="f_stock" placeholder="0">
-      <input type="text" id="f_image_url" placeholder="Optional image URL">
+    </div>
+    <div class="form-row full">
+      <label>Product Photo</label>
+      <div id="imagePreviewWrap" style="margin-bottom:8px;display:none;">
+        <img id="imagePreview" style="width:100%;max-height:180px;object-fit:contain;background:var(--surface2);border-radius:8px;">
+      </div>
+      <input type="file" id="f_image_file" accept="image/*">
+      <input type="hidden" id="f_image_url">
+      <span id="uploadStatus" style="font-size:.75rem;color:var(--text3);"></span>
     </div>
     <div class="form-row full">
       <label>Specs / description note</label>
@@ -320,8 +328,48 @@ function openModal(product = null) {
   document.getElementById('f_condition').value = product ? product.condition : 'Brand New';
   document.getElementById('f_featured').checked = product ? !!product.featured : false;
   document.getElementById('f_active').checked = product ? !!product.active : true;
+  document.getElementById('f_image_file').value = '';
+  document.getElementById('uploadStatus').textContent = '';
+  const preview = document.getElementById('imagePreview');
+  const previewWrap = document.getElementById('imagePreviewWrap');
+  if (product && product.image_url) {
+    preview.src = product.image_url;
+    previewWrap.style.display = 'block';
+  } else {
+    previewWrap.style.display = 'none';
+  }
   modalOverlay.classList.add('open');
 }
+
+// ---------- IMAGE UPLOAD ----------
+document.getElementById('f_image_file').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const statusEl = document.getElementById('uploadStatus');
+  statusEl.textContent = 'Uploading…';
+
+  // filename: timestamp + sanitized original name, keeps them unique
+  const safeName = file.name.replace(/[^a-zA-Z0-9.\-]/g, '_');
+  const path = `${Date.now()}_${safeName}`;
+
+  const { error: uploadError } = await supabase.storage
+    .from('product-images')
+    .upload(path, file, { upsert: false });
+
+  if (uploadError) {
+    statusEl.textContent = 'Upload failed: ' + uploadError.message;
+    return;
+  }
+
+  const { data } = supabase.storage.from('product-images').getPublicUrl(path);
+  document.getElementById('f_image_url').value = data.publicUrl;
+
+  const preview = document.getElementById('imagePreview');
+  preview.src = data.publicUrl;
+  document.getElementById('imagePreviewWrap').style.display = 'block';
+  statusEl.textContent = 'Uploaded ✓';
+});
 
 function closeModal() { modalOverlay.classList.remove('open'); }
 
