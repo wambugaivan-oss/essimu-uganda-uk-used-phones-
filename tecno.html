@@ -162,7 +162,7 @@ WhatsApp
 <option value="high">Price: High to Low</option>
 </select>
 </div>
-<div class="results-count" id="resultsCount"></div>
+<div class="results-count" id="resultsCount">Loading…</div>
 <div class="products-grid" id="productsGrid"></div>
 
 <div class="repair-strip">
@@ -181,10 +181,10 @@ WhatsApp
 <div class="footer-col-title">Categories</div>
 <a href="samsung.html">Samsung Phones</a>
 <a href="iphone.html">iPhones</a>
-<a href="index.html#products">Google Pixel</a>
-<a href="index.html#products">Oppo</a>
-<a href="index.html#products">Redmi</a>
-<a href="index.html#products">Tecno &amp; Others</a>
+<a href="pixel.html">Google Pixel</a>
+<a href="oppo.html">Oppo</a>
+<a href="redmi.html">Redmi</a>
+<a href="tecno.html">Tecno &amp; Others</a>
 </div>
 <div class="footer-col">
 <div class="footer-col-title">Services</div>
@@ -215,123 +215,49 @@ WhatsApp
 <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 
-<script>
-// TECNO PRODUCTS — real data from ESSIMU Uganda Master Price List (compiled 2026-08-04)
-const PRODUCTS = [
-{id:6001,name:'Phantom 8',cond:'UK Used',price:700000,priceRange:'UGX 700,000',specs:'64GB · 6GB RAM · Phantom Series',series:'Phantom Series',badge:'used',waMsg:'Phantom 8 Tecno UK Used - UGX 700,000'},
-{id:6002,name:'Phantom 8',cond:'Brand New',price:1800000,priceRange:'UGX 1,800,000',specs:'64GB · 6GB RAM · Phantom Series',series:'Phantom Series',badge:'new',waMsg:'Phantom 8 Tecno Brand New - UGX 1,800,000'},
-{id:6003,name:'Phantom 9',cond:'UK Used',price:800000,priceRange:'UGX 800,000',specs:'128GB · 6GB RAM · Phantom Series',series:'Phantom Series',badge:'used',waMsg:'Phantom 9 Tecno UK Used - UGX 800,000'},
-{id:6004,name:'Phantom 9',cond:'Brand New',price:1700000,priceRange:'UGX 1,700,000',specs:'128GB · 6GB RAM · Phantom Series',series:'Phantom Series',badge:'new',waMsg:'Phantom 9 Tecno Brand New - UGX 1,700,000'},
-{id:6005,name:'Phantom X',cond:'UK Used',price:1300000,priceRange:'UGX 1,300,000',specs:'256GB · 8GB RAM · Phantom Series',series:'Phantom Series',badge:'used',waMsg:'Phantom X Tecno UK Used - UGX 1,300,000'},
-{id:6006,name:'Phantom X',cond:'Brand New',price:2300000,priceRange:'UGX 2,300,000',specs:'256GB · 8GB RAM · Phantom Series',series:'Phantom Series',badge:'new',waMsg:'Phantom X Tecno Brand New - UGX 2,300,000'},
-{id:6007,name:'Phantom X2',cond:'UK Used',price:2000000,priceRange:'UGX 2,000,000',specs:'256GB · 8GB RAM · Phantom Series',series:'Phantom Series',badge:'used',waMsg:'Phantom X2 Tecno UK Used - UGX 2,000,000'},
-{id:6008,name:'Phantom X2',cond:'Brand New',price:3200000,priceRange:'UGX 3,200,000',specs:'256GB · 8GB RAM · Phantom Series',series:'Phantom Series',badge:'new',waMsg:'Phantom X2 Tecno Brand New - UGX 3,200,000'},
-{id:6009,name:'Phantom X2 Pro',cond:'UK Used',price:2700000,priceRange:'UGX 2,700,000',specs:'256GB · 12GB RAM · Phantom Series',series:'Phantom Series',badge:'used',waMsg:'Phantom X2 Pro Tecno UK Used - UGX 2,700,000'},
-{id:6010,name:'Phantom X2 Pro',cond:'Brand New',price:4000000,priceRange:'UGX 4,000,000',specs:'256GB · 12GB RAM · Phantom Series',series:'Phantom Series',badge:'new',waMsg:'Phantom X2 Pro Tecno Brand New - UGX 4,000,000'},
-{id:6011,name:'Phantom V Fold',cond:'UK Used',price:4000000,priceRange:'UGX 4,000,000',specs:'256GB · 12GB RAM · Phantom Series',series:'Phantom Series',badge:'used',waMsg:'Phantom V Fold Tecno UK Used - UGX 4,000,000'},
-{id:6012,name:'Phantom V Fold',cond:'Brand New',price:6000000,priceRange:'UGX 6,000,000',specs:'256GB · 12GB RAM · Phantom Series',series:'Phantom Series',badge:'new',waMsg:'Phantom V Fold Tecno Brand New - UGX 6,000,000'},
-{id:6013,name:'Phantom V Flip',cond:'UK Used',price:2800000,priceRange:'UGX 2,800,000',specs:'256GB · 8GB RAM · Phantom Series',series:'Phantom Series',badge:'used',waMsg:'Phantom V Flip Tecno UK Used - UGX 2,800,000'},
-{id:6014,name:'Phantom V Flip',cond:'Brand New',price:4000000,priceRange:'UGX 4,000,000',specs:'256GB · 8GB RAM · Phantom Series',series:'Phantom Series',badge:'new',waMsg:'Phantom V Flip Tecno Brand New - UGX 4,000,000'},
-{id:6015,name:'Camon 15',cond:'UK Used',price:450000,priceRange:'UGX 450,000',specs:'64GB · 4GB RAM · Camon Series',series:'Camon Series',badge:'used',waMsg:'Camon 15 Tecno UK Used - UGX 450,000'},
-{id:6016,name:'Camon 15',cond:'Brand New',price:800000,priceRange:'UGX 800,000',specs:'64GB · 4GB RAM · Camon Series',series:'Camon Series',badge:'new',waMsg:'Camon 15 Tecno Brand New - UGX 800,000'},
-{id:6017,name:'Camon 17',cond:'UK Used',price:650000,priceRange:'UGX 650,000',specs:'128GB · 6GB RAM · Camon Series',series:'Camon Series',badge:'used',waMsg:'Camon 17 Tecno UK Used - UGX 650,000'},
-{id:6018,name:'Camon 17',cond:'Brand New',price:1100000,priceRange:'UGX 1,100,000',specs:'128GB · 6GB RAM · Camon Series',series:'Camon Series',badge:'new',waMsg:'Camon 17 Tecno Brand New - UGX 1,100,000'},
-{id:6019,name:'Camon 19',cond:'UK Used',price:900000,priceRange:'UGX 900,000',specs:'128GB · 6GB RAM · Camon Series',series:'Camon Series',badge:'used',waMsg:'Camon 19 Tecno UK Used - UGX 900,000'},
-{id:6020,name:'Camon 19',cond:'Brand New',price:1500000,priceRange:'UGX 1,500,000',specs:'128GB · 6GB RAM · Camon Series',series:'Camon Series',badge:'new',waMsg:'Camon 19 Tecno Brand New - UGX 1,500,000'},
-{id:6021,name:'Camon 19 Pro',cond:'UK Used',price:750000,priceRange:'UGX 750,000',specs:'128GB · 8GB RAM · Camon Series',series:'Camon Series',badge:'used',waMsg:'Camon 19 Pro Tecno UK Used - UGX 750,000'},
-{id:6022,name:'Camon 19 Pro',cond:'Brand New',price:1800000,priceRange:'UGX 1,800,000',specs:'128GB · 8GB RAM · Camon Series',series:'Camon Series',badge:'new',waMsg:'Camon 19 Pro Tecno Brand New - UGX 1,800,000'},
-{id:6023,name:'Camon 20',cond:'UK Used',price:1400000,priceRange:'UGX 1,400,000',specs:'256GB · 8GB RAM · Camon Series',series:'Camon Series',badge:'used',waMsg:'Camon 20 Tecno UK Used - UGX 1,400,000'},
-{id:6024,name:'Camon 20',cond:'Brand New',price:2000000,priceRange:'UGX 2,000,000',specs:'256GB · 8GB RAM · Camon Series',series:'Camon Series',badge:'new',waMsg:'Camon 20 Tecno Brand New - UGX 2,000,000'},
-{id:6025,name:'Camon 20 Pro',cond:'UK Used',price:1200000,priceRange:'UGX 1,200,000',specs:'256GB · 8GB RAM · Camon Series',series:'Camon Series',badge:'used',waMsg:'Camon 20 Pro Tecno UK Used - UGX 1,200,000'},
-{id:6026,name:'Camon 20 Pro',cond:'Brand New',price:2300000,priceRange:'UGX 2,300,000',specs:'256GB · 8GB RAM · Camon Series',series:'Camon Series',badge:'new',waMsg:'Camon 20 Pro Tecno Brand New - UGX 2,300,000'},
-{id:6027,name:'Camon 30',cond:'UK Used',price:1800000,priceRange:'UGX 1,800,000',specs:'256GB · 8GB RAM · Camon Series',series:'Camon Series',badge:'used',waMsg:'Camon 30 Tecno UK Used - UGX 1,800,000'},
-{id:6028,name:'Camon 30',cond:'Brand New',price:2500000,priceRange:'UGX 2,500,000',specs:'256GB · 8GB RAM · Camon Series',series:'Camon Series',badge:'new',waMsg:'Camon 30 Tecno Brand New - UGX 2,500,000'},
-{id:6029,name:'Camon 30 Pro',cond:'UK Used',price:2800000,priceRange:'UGX 2,800,000',specs:'512GB · 12GB RAM · Camon Series',series:'Camon Series',badge:'used',waMsg:'Camon 30 Pro Tecno UK Used - UGX 2,800,000'},
-{id:6030,name:'Camon 30 Pro',cond:'Brand New',price:3800000,priceRange:'UGX 3,800,000',specs:'512GB · 12GB RAM · Camon Series',series:'Camon Series',badge:'new',waMsg:'Camon 30 Pro Tecno Brand New - UGX 3,800,000'},
-{id:6031,name:'Camon 40',cond:'UK Used',price:2000000,priceRange:'UGX 2,000,000',specs:'256GB · 8GB RAM · Camon Series',series:'Camon Series',badge:'used',waMsg:'Camon 40 Tecno UK Used - UGX 2,000,000'},
-{id:6032,name:'Camon 40',cond:'Brand New',price:2800000,priceRange:'UGX 2,800,000',specs:'256GB · 8GB RAM · Camon Series',series:'Camon Series',badge:'new',waMsg:'Camon 40 Tecno Brand New - UGX 2,800,000'},
-{id:6033,name:'Pova',cond:'UK Used',price:450000,priceRange:'UGX 450,000',specs:'64GB · 4GB RAM · Pova Series',series:'Pova Series',badge:'used',waMsg:'Pova Tecno UK Used - UGX 450,000'},
-{id:6034,name:'Pova',cond:'Brand New',price:800000,priceRange:'UGX 800,000',specs:'64GB · 4GB RAM · Pova Series',series:'Pova Series',badge:'new',waMsg:'Pova Tecno Brand New - UGX 800,000'},
-{id:6035,name:'Pova 3',cond:'UK Used',price:800000,priceRange:'UGX 800,000',specs:'128GB · 6GB RAM · Pova Series',series:'Pova Series',badge:'used',waMsg:'Pova 3 Tecno UK Used - UGX 800,000'},
-{id:6036,name:'Pova 3',cond:'Brand New',price:1300000,priceRange:'UGX 1,300,000',specs:'128GB · 6GB RAM · Pova Series',series:'Pova Series',badge:'new',waMsg:'Pova 3 Tecno Brand New - UGX 1,300,000'},
-{id:6037,name:'Pova 5',cond:'UK Used',price:1200000,priceRange:'UGX 1,200,000',specs:'128GB · 8GB RAM · Pova Series',series:'Pova Series',badge:'used',waMsg:'Pova 5 Tecno UK Used - UGX 1,200,000'},
-{id:6038,name:'Pova 5',cond:'Brand New',price:1800000,priceRange:'UGX 1,800,000',specs:'128GB · 8GB RAM · Pova Series',series:'Pova Series',badge:'new',waMsg:'Pova 5 Tecno Brand New - UGX 1,800,000'},
-{id:6039,name:'Pova 5 Pro',cond:'UK Used',price:1100000,priceRange:'UGX 1,100,000',specs:'256GB · 8GB RAM · Pova Series',series:'Pova Series',badge:'used',waMsg:'Pova 5 Pro Tecno UK Used - UGX 1,100,000'},
-{id:6040,name:'Pova 5 Pro',cond:'Brand New',price:2300000,priceRange:'UGX 2,300,000',specs:'256GB · 8GB RAM · Pova Series',series:'Pova Series',badge:'new',waMsg:'Pova 5 Pro Tecno Brand New - UGX 2,300,000'},
-{id:6041,name:'Pova 6',cond:'UK Used',price:1600000,priceRange:'UGX 1,600,000',specs:'256GB · 8GB RAM · Pova Series',series:'Pova Series',badge:'used',waMsg:'Pova 6 Tecno UK Used - UGX 1,600,000'},
-{id:6042,name:'Pova 6',cond:'Brand New',price:2200000,priceRange:'UGX 2,200,000',specs:'256GB · 8GB RAM · Pova Series',series:'Pova Series',badge:'new',waMsg:'Pova 6 Tecno Brand New - UGX 2,200,000'},
-{id:6043,name:'Pova 6 Pro',cond:'UK Used',price:2200000,priceRange:'UGX 2,200,000',specs:'256GB · 12GB RAM · Pova Series',series:'Pova Series',badge:'used',waMsg:'Pova 6 Pro Tecno UK Used - UGX 2,200,000'},
-{id:6044,name:'Pova 6 Pro',cond:'Brand New',price:3000000,priceRange:'UGX 3,000,000',specs:'256GB · 12GB RAM · Pova Series',series:'Pova Series',badge:'new',waMsg:'Pova 6 Pro Tecno Brand New - UGX 3,000,000'},
-{id:6045,name:'Spark 5',cond:'UK Used',price:200000,priceRange:'UGX 200,000',specs:'32GB · 2GB RAM · Spark Series',series:'Spark Series',badge:'used',waMsg:'Spark 5 Tecno UK Used - UGX 200,000'},
-{id:6046,name:'Spark 5',cond:'Brand New',price:450000,priceRange:'UGX 450,000',specs:'32GB · 2GB RAM · Spark Series',series:'Spark Series',badge:'new',waMsg:'Spark 5 Tecno Brand New - UGX 450,000'},
-{id:6047,name:'Spark 8',cond:'UK Used',price:350000,priceRange:'UGX 350,000',specs:'64GB · 2GB RAM · Spark Series',series:'Spark Series',badge:'used',waMsg:'Spark 8 Tecno UK Used - UGX 350,000'},
-{id:6048,name:'Spark 8',cond:'Brand New',price:750000,priceRange:'UGX 750,000',specs:'64GB · 2GB RAM · Spark Series',series:'Spark Series',badge:'new',waMsg:'Spark 8 Tecno Brand New - UGX 750,000'},
-{id:6049,name:'Spark 10',cond:'UK Used',price:550000,priceRange:'UGX 550,000',specs:'128GB · 4GB RAM · Spark Series',series:'Spark Series',badge:'used',waMsg:'Spark 10 Tecno UK Used - UGX 550,000'},
-{id:6050,name:'Spark 10',cond:'Brand New',price:1000000,priceRange:'UGX 1,000,000',specs:'128GB · 4GB RAM · Spark Series',series:'Spark Series',badge:'new',waMsg:'Spark 10 Tecno Brand New - UGX 1,000,000'},
-{id:6051,name:'Spark 10 Pro',cond:'UK Used',price:800000,priceRange:'UGX 800,000',specs:'128GB · 8GB RAM · Spark Series',series:'Spark Series',badge:'used',waMsg:'Spark 10 Pro Tecno UK Used - UGX 800,000'},
-{id:6052,name:'Spark 10 Pro',cond:'Brand New',price:1300000,priceRange:'UGX 1,300,000',specs:'128GB · 8GB RAM · Spark Series',series:'Spark Series',badge:'new',waMsg:'Spark 10 Pro Tecno Brand New - UGX 1,300,000'},
-{id:6053,name:'Spark 20',cond:'UK Used',price:700000,priceRange:'UGX 700,000',specs:'128GB · 4GB RAM · Spark Series',series:'Spark Series',badge:'used',waMsg:'Spark 20 Tecno UK Used - UGX 700,000'},
-{id:6054,name:'Spark 20',cond:'Brand New',price:1100000,priceRange:'UGX 1,100,000',specs:'128GB · 4GB RAM · Spark Series',series:'Spark Series',badge:'new',waMsg:'Spark 20 Tecno Brand New - UGX 1,100,000'},
-{id:6055,name:'Spark 20 Pro',cond:'UK Used',price:1100000,priceRange:'UGX 1,100,000',specs:'256GB · 8GB RAM · Spark Series',series:'Spark Series',badge:'used',waMsg:'Spark 20 Pro Tecno UK Used - UGX 1,100,000'},
-{id:6056,name:'Spark 20 Pro',cond:'Brand New',price:1700000,priceRange:'UGX 1,700,000',specs:'256GB · 8GB RAM · Spark Series',series:'Spark Series',badge:'new',waMsg:'Spark 20 Pro Tecno Brand New - UGX 1,700,000'},
-{id:6057,name:'Spark 30',cond:'UK Used',price:900000,priceRange:'UGX 900,000',specs:'128GB · 8GB RAM · Spark Series',series:'Spark Series',badge:'used',waMsg:'Spark 30 Tecno UK Used - UGX 900,000'},
-{id:6058,name:'Spark 30',cond:'Brand New',price:1400000,priceRange:'UGX 1,400,000',specs:'128GB · 8GB RAM · Spark Series',series:'Spark Series',badge:'new',waMsg:'Spark 30 Tecno Brand New - UGX 1,400,000'},
-{id:6059,name:'Spark 40',cond:'UK Used',price:1100000,priceRange:'UGX 1,100,000',specs:'128GB · 8GB RAM · Spark Series',series:'Spark Series',badge:'used',waMsg:'Spark 40 Tecno UK Used - UGX 1,100,000'},
-{id:6060,name:'Spark 40',cond:'Brand New',price:1600000,priceRange:'UGX 1,600,000',specs:'128GB · 8GB RAM · Spark Series',series:'Spark Series',badge:'new',waMsg:'Spark 40 Tecno Brand New - UGX 1,600,000'},
-{id:6061,name:'Pop 5',cond:'UK Used',price:150000,priceRange:'UGX 150,000',specs:'32GB · 2GB RAM · Pop Series',series:'Pop Series',badge:'used',waMsg:'Pop 5 Tecno UK Used - UGX 150,000'},
-{id:6062,name:'Pop 5',cond:'Brand New',price:350000,priceRange:'UGX 350,000',specs:'32GB · 2GB RAM · Pop Series',series:'Pop Series',badge:'new',waMsg:'Pop 5 Tecno Brand New - UGX 350,000'},
-{id:6063,name:'Pop 8',cond:'UK Used',price:300000,priceRange:'UGX 300,000',specs:'64GB · 3GB RAM · Pop Series',series:'Pop Series',badge:'used',waMsg:'Pop 8 Tecno UK Used - UGX 300,000'},
-{id:6064,name:'Pop 8',cond:'Brand New',price:600000,priceRange:'UGX 600,000',specs:'64GB · 3GB RAM · Pop Series',series:'Pop Series',badge:'new',waMsg:'Pop 8 Tecno Brand New - UGX 600,000'},
-{id:6065,name:'Pop 10',cond:'UK Used',price:500000,priceRange:'UGX 500,000',specs:'128GB · 4GB RAM · Pop Series',series:'Pop Series',badge:'used',waMsg:'Pop 10 Tecno UK Used - UGX 500,000'},
-{id:6066,name:'Pop 10',cond:'Brand New',price:850000,priceRange:'UGX 850,000',specs:'128GB · 4GB RAM · Pop Series',series:'Pop Series',badge:'new',waMsg:'Pop 10 Tecno Brand New - UGX 850,000'}
-];
+<script type="module">
+import { fetchProducts } from './assets/js/supabase.js';
+import { renderProductGrid } from './assets/js/products.js';
 
 const grid = document.getElementById('productsGrid');
 const countEl = document.getElementById('resultsCount');
 const cntAll = document.getElementById('cnt-all');
-cntAll.textContent = PRODUCTS.length;
 
+let ALL_PRODUCTS = [];
 let condFilter = 'all';
 let seriesFilter = 'all';
 let sortMode = 'default';
 
-function fmtUGX(n){ return 'UGX ' + n.toLocaleString('en-US'); }
-
-function render(){
-  let list = PRODUCTS.filter(p => (condFilter==='all'||p.cond===condFilter) && (seriesFilter==='all'||p.series===seriesFilter));
-  if(sortMode==='low') list = list.slice().sort((a,b)=>a.price-b.price);
-  if(sortMode==='high') list = list.slice().sort((a,b)=>b.price-a.price);
+function applyFiltersAndRender(){
+  let list = ALL_PRODUCTS.filter(p =>
+    (condFilter === 'all' || p.condition === condFilter) &&
+    (seriesFilter === 'all' || p.series === seriesFilter)
+  );
+  if (sortMode === 'low')  list = list.slice().sort((a, b) => a.price - b.price);
+  if (sortMode === 'high') list = list.slice().sort((a, b) => b.price - a.price);
   countEl.textContent = list.length + ' phones found';
-  grid.innerHTML = list.map(p => `
-    <div class="prod-card">
-      <span class="prod-card-badge badge-${p.badge}">${p.cond}</span>
-      <div class="prod-img-wrap"><span class="prod-img-placeholder">🟡</span></div>
-      <div class="prod-body">
-        <div class="prod-series">${p.series}</div>
-        <div class="prod-name">${p.name}</div>
-        <div class="prod-specs">${p.specs}</div>
-        <div class="prod-price">${p.priceRange}</div>
-        <a class="prod-btn-wa" target="_blank" href="https://wa.me/256756922058?text=${encodeURIComponent('Hello, I want to buy: ' + p.waMsg)}">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          Ask on WhatsApp
-        </a>
-      </div>
-    </div>
-  `).join('');
+  renderProductGrid(grid, list);
 }
 
-document.querySelectorAll('.filter-btn').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+async function init(){
+  grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text3);">Loading Tecno phones…</div>';
+  ALL_PRODUCTS = await fetchProducts({ brand: 'Tecno' });
+  cntAll.textContent = ALL_PRODUCTS.length;
+  applyFiltersAndRender();
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     condFilter = btn.dataset.cond;
-    render();
+    applyFiltersAndRender();
   });
 });
-document.getElementById('seriesSelect').addEventListener('change', e=>{ seriesFilter = e.target.value; render(); });
-document.getElementById('sortSelect').addEventListener('change', e=>{ sortMode = e.target.value; render(); });
+document.getElementById('seriesSelect').addEventListener('change', e => { seriesFilter = e.target.value; applyFiltersAndRender(); });
+document.getElementById('sortSelect').addEventListener('change', e => { sortMode = e.target.value; applyFiltersAndRender(); });
 
-render();
+init();
 </script>
 </body>
 </html>
