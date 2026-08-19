@@ -31,6 +31,7 @@ export async function fetchProducts(filters = {}) {
     .order('created_at', { ascending: false });
 
   if (filters.brand)     query = query.eq('brand', filters.brand);
+  if (filters.brands)    query = query.in('brand', filters.brands);
   if (filters.category)  query = query.eq('category', filters.category);
   if (filters.condition) query = query.eq('condition', filters.condition);
   if (filters.featured)  query = query.eq('featured', true);
