@@ -49,6 +49,14 @@ function buildWhatsAppLink(product) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
+// Whole-number discount % computed from original_price -> price.
+// Returns null (never a fake number) when there's no reliable
+// original_price to compare against, or it isn't actually higher.
+function discountPercent(product) {
+  if (!product.original_price || product.original_price <= product.price) return null;
+  return Math.round((1 - product.price / product.original_price) * 100);
+}
+
 function specsLine(product) {
   const parts = [];
   if (product.storage) parts.push(product.storage);
@@ -98,5 +106,4 @@ export function renderProductGrid(containerEl, products) {
   containerEl.innerHTML = products.map(renderProductCard).join('');
 }
 
-export { fmtUGX, fmtPriceRange, buildWhatsAppLink };
-
+export { fmtUGX, fmtPriceRange, buildWhatsAppLink, discountPercent, specsLine, BRAND_EMOJI, CATEGORY_EMOJI };
