@@ -151,6 +151,11 @@ tbody tr:hover{background:var(--surface2);}
       <input type="number" id="f_price_max" placeholder="Max price (optional)">
     </div>
     <div class="form-row">
+      <label>Was Price (UGX)</label>
+      <input type="number" id="f_original_price" placeholder="Old price before discount (optional)">
+      <span style="font-size:.72rem;color:var(--text3);align-self:center;">Only set this if the price actually dropped from here — it drives the discount badge on Hot Deals.</span>
+    </div>
+    <div class="form-row">
       <label>Wholesale price / MOQ</label>
       <input type="number" id="f_wholesale_price" placeholder="Optional">
       <input type="number" id="f_wholesale_min_qty" placeholder="Optional">
@@ -174,7 +179,7 @@ tbody tr:hover{background:var(--surface2);}
     </div>
 
     <div class="checkbox-row">
-      <label><input type="checkbox" id="f_featured"> Featured</label>
+      <label><input type="checkbox" id="f_featured"> 🔥 Hot Deal (shows on the Hot Deals page)</label>
       <label><input type="checkbox" id="f_active" checked> Active (visible on site)</label>
     </div>
 
@@ -291,7 +296,7 @@ function renderTable() {
       <tbody>
         ${list.map(p => `
           <tr>
-            <td data-label="Product"><strong>${p.brand}</strong> ${p.model}</td>
+            <td data-label="Product">${p.featured ? '🔥 ' : ''}<strong>${p.brand}</strong> ${p.model}</td>
             <td data-label="Condition"><span class="pill ${p.condition === 'Brand New' ? 'pill-new' : 'pill-used'}">${p.condition}</span></td>
             <td data-label="Price">${fmtUGX(p.price)}${p.price_max ? ' – ' + fmtUGX(p.price_max) : ''}</td>
             <td data-label="Stock">${p.stock}</td>
@@ -317,7 +322,7 @@ document.getElementById('statusFilter').addEventListener('change', renderTable);
 // ---------- MODAL / FORM ----------
 const modalOverlay = document.getElementById('modalOverlay');
 const fields = ['id','brand','model','category','condition','storage','ram','colour','series',
-  'price','price_max','wholesale_price','wholesale_min_qty','stock','image_url','specs'];
+  'price','price_max','original_price','wholesale_price','wholesale_min_qty','stock','image_url','specs'];
 
 function openModal(product = null) {
   document.getElementById('modalTitle').textContent = product ? 'Edit Product' : 'Add Product';
@@ -390,6 +395,7 @@ document.getElementById('modalSaveBtn').addEventListener('click', async () => {
     series: document.getElementById('f_series').value.trim() || null,
     price: Number(document.getElementById('f_price').value) || 0,
     price_max: document.getElementById('f_price_max').value ? Number(document.getElementById('f_price_max').value) : null,
+    original_price: document.getElementById('f_original_price').value ? Number(document.getElementById('f_original_price').value) : null,
     wholesale_price: document.getElementById('f_wholesale_price').value ? Number(document.getElementById('f_wholesale_price').value) : null,
     wholesale_min_qty: document.getElementById('f_wholesale_min_qty').value ? Number(document.getElementById('f_wholesale_min_qty').value) : null,
     stock: Number(document.getElementById('f_stock').value) || 0,
