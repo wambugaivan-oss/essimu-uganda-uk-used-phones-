@@ -161,7 +161,7 @@ WhatsApp
 <option value="high">Price: High to Low</option>
 </select>
 </div>
-<div class="results-count" id="resultsCount"></div>
+<div class="results-count" id="resultsCount">Loading…</div>
 <div class="products-grid" id="productsGrid"></div>
 
 <div class="repair-strip">
@@ -180,10 +180,10 @@ WhatsApp
 <div class="footer-col-title">Categories</div>
 <a href="samsung.html">Samsung Phones</a>
 <a href="iphone.html">iPhones</a>
-<a href="index.html#products">Google Pixel</a>
-<a href="index.html#products">Oppo</a>
-<a href="index.html#products">Redmi</a>
-<a href="index.html#products">Tecno &amp; Others</a>
+<a href="pixel.html">Google Pixel</a>
+<a href="oppo.html">Oppo</a>
+<a href="redmi.html">Redmi</a>
+<a href="tecno.html">Tecno &amp; Others</a>
 </div>
 <div class="footer-col">
 <div class="footer-col-title">Services</div>
@@ -214,93 +214,49 @@ WhatsApp
 <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 
-<script>
-// GOOGLE PIXEL PRODUCTS — real data from ESSIMU Uganda Master Price List (compiled 2026-08-04)
-const PRODUCTS = [
-{id:3001,name:'Pixel 6',cond:'UK Used',price:1000000,priceRange:'UGX 1,000,000 – 1,300,000',specs:'128GB · Flagship',series:'Flagship',badge:'used',waMsg:'Pixel 6 Google Pixel UK Used - UGX 1,000,000 – 1,300,000'},
-{id:3002,name:'Pixel 6',cond:'Brand New',price:1800000,priceRange:'UGX 1,800,000 – 2,200,000',specs:'128GB · Flagship',series:'Flagship',badge:'new',waMsg:'Pixel 6 Google Pixel Brand New - UGX 1,800,000 – 2,200,000'},
-{id:3003,name:'Pixel 6 Pro',cond:'UK Used',price:1500000,priceRange:'UGX 1,500,000 – 1,800,000',specs:'128GB · Flagship',series:'Flagship',badge:'used',waMsg:'Pixel 6 Pro Google Pixel UK Used - UGX 1,500,000 – 1,800,000'},
-{id:3004,name:'Pixel 6 Pro',cond:'Brand New',price:2800000,priceRange:'UGX 2,800,000 – 3,200,000',specs:'128GB · Flagship',series:'Flagship',badge:'new',waMsg:'Pixel 6 Pro Google Pixel Brand New - UGX 2,800,000 – 3,200,000'},
-{id:3005,name:'Pixel 6a',cond:'UK Used',price:900000,priceRange:'UGX 900,000',specs:'128GB · Flagship',series:'Flagship',badge:'used',waMsg:'Pixel 6a Google Pixel UK Used - UGX 900,000'},
-{id:3006,name:'Pixel 6a',cond:'Brand New',price:1500000,priceRange:'UGX 1,500,000',specs:'128GB · Flagship',series:'Flagship',badge:'new',waMsg:'Pixel 6a Google Pixel Brand New - UGX 1,500,000'},
-{id:3007,name:'Pixel 7',cond:'UK Used',price:1300000,priceRange:'UGX 1,300,000 – 1,600,000',specs:'128GB · Flagship',series:'Flagship',badge:'used',waMsg:'Pixel 7 Google Pixel UK Used - UGX 1,300,000 – 1,600,000'},
-{id:3008,name:'Pixel 7',cond:'Brand New',price:2300000,priceRange:'UGX 2,300,000 – 2,700,000',specs:'128GB · Flagship',series:'Flagship',badge:'new',waMsg:'Pixel 7 Google Pixel Brand New - UGX 2,300,000 – 2,700,000'},
-{id:3009,name:'Pixel 7 Pro',cond:'UK Used',price:1700000,priceRange:'UGX 1,700,000 – 2,000,000',specs:'128GB · Flagship',series:'Flagship',badge:'used',waMsg:'Pixel 7 Pro Google Pixel UK Used - UGX 1,700,000 – 2,000,000'},
-{id:3010,name:'Pixel 7 Pro',cond:'Brand New',price:3000000,priceRange:'UGX 3,000,000 – 3,500,000',specs:'128GB · Flagship',series:'Flagship',badge:'new',waMsg:'Pixel 7 Pro Google Pixel Brand New - UGX 3,000,000 – 3,500,000'},
-{id:3011,name:'Pixel 7a',cond:'UK Used',price:1200000,priceRange:'UGX 1,200,000',specs:'128GB · Flagship',series:'Flagship',badge:'used',waMsg:'Pixel 7a Google Pixel UK Used - UGX 1,200,000'},
-{id:3012,name:'Pixel 7a',cond:'Brand New',price:1900000,priceRange:'UGX 1,900,000',specs:'128GB · Flagship',series:'Flagship',badge:'new',waMsg:'Pixel 7a Google Pixel Brand New - UGX 1,900,000'},
-{id:3013,name:'Pixel 8',cond:'UK Used',price:1700000,priceRange:'UGX 1,700,000 – 2,000,000',specs:'128GB · Flagship',series:'Flagship',badge:'used',waMsg:'Pixel 8 Google Pixel UK Used - UGX 1,700,000 – 2,000,000'},
-{id:3014,name:'Pixel 8',cond:'Brand New',price:2800000,priceRange:'UGX 2,800,000 – 3,300,000',specs:'128GB · Flagship',series:'Flagship',badge:'new',waMsg:'Pixel 8 Google Pixel Brand New - UGX 2,800,000 – 3,300,000'},
-{id:3015,name:'Pixel 8 Pro',cond:'UK Used',price:2300000,priceRange:'UGX 2,300,000 – 2,800,000',specs:'128GB · Flagship',series:'Flagship',badge:'used',waMsg:'Pixel 8 Pro Google Pixel UK Used - UGX 2,300,000 – 2,800,000'},
-{id:3016,name:'Pixel 8 Pro',cond:'Brand New',price:3800000,priceRange:'UGX 3,800,000 – 4,300,000',specs:'128GB · Flagship',series:'Flagship',badge:'new',waMsg:'Pixel 8 Pro Google Pixel Brand New - UGX 3,800,000 – 4,300,000'},
-{id:3017,name:'Pixel 8a',cond:'UK Used',price:1500000,priceRange:'UGX 1,500,000',specs:'128GB · Flagship',series:'Flagship',badge:'used',waMsg:'Pixel 8a Google Pixel UK Used - UGX 1,500,000'},
-{id:3018,name:'Pixel 8a',cond:'Brand New',price:2300000,priceRange:'UGX 2,300,000',specs:'128GB · Flagship',series:'Flagship',badge:'new',waMsg:'Pixel 8a Google Pixel Brand New - UGX 2,300,000'},
-{id:3019,name:'Pixel 9',cond:'UK Used',price:2700000,priceRange:'UGX 2,700,000 – 3,000,000',specs:'128GB · Pixel 9 Series',series:'Pixel 9 Series',badge:'used',waMsg:'Pixel 9 Google Pixel UK Used - UGX 2,700,000 – 3,000,000'},
-{id:3020,name:'Pixel 9',cond:'Brand New',price:3800000,priceRange:'UGX 3,800,000 – 4,300,000',specs:'128GB · Pixel 9 Series',series:'Pixel 9 Series',badge:'new',waMsg:'Pixel 9 Google Pixel Brand New - UGX 3,800,000 – 4,300,000'},
-{id:3021,name:'Pixel 9 Pro',cond:'UK Used',price:3800000,priceRange:'UGX 3,800,000 – 4,200,000',specs:'128GB · Pixel 9 Series',series:'Pixel 9 Series',badge:'used',waMsg:'Pixel 9 Pro Google Pixel UK Used - UGX 3,800,000 – 4,200,000'},
-{id:3022,name:'Pixel 9 Pro',cond:'Brand New',price:5000000,priceRange:'UGX 5,000,000 – 5,500,000',specs:'128GB · Pixel 9 Series',series:'Pixel 9 Series',badge:'new',waMsg:'Pixel 9 Pro Google Pixel Brand New - UGX 5,000,000 – 5,500,000'},
-{id:3023,name:'Pixel 9 Pro XL',cond:'UK Used',price:3000000,priceRange:'UGX 3,000,000 – 4,000,000',specs:'128GB · Pixel 9 Series',series:'Pixel 9 Series',badge:'used',waMsg:'Pixel 9 Pro XL Google Pixel UK Used - UGX 3,000,000 – 4,000,000'},
-{id:3024,name:'Pixel 9 Pro XL',cond:'Brand New',price:4500000,priceRange:'UGX 4,500,000 – 5,800,000',specs:'128GB · Pixel 9 Series',series:'Pixel 9 Series',badge:'new',waMsg:'Pixel 9 Pro XL Google Pixel Brand New - UGX 4,500,000 – 5,800,000'},
-{id:3025,name:'Pixel 9 Pro Fold',cond:'UK Used',price:6000000,priceRange:'UGX 6,000,000',specs:'256GB · Fold',series:'Fold',badge:'used',waMsg:'Pixel 9 Pro Fold Google Pixel UK Used - UGX 6,000,000'},
-{id:3026,name:'Pixel 9 Pro Fold',cond:'Brand New',price:8000000,priceRange:'UGX 8,000,000',specs:'256GB · Fold',series:'Fold',badge:'new',waMsg:'Pixel 9 Pro Fold Google Pixel Brand New - UGX 8,000,000'},
-{id:3027,name:'Pixel 5',cond:'UK Used',price:800000,priceRange:'UGX 800,000',specs:'128GB · Budget',series:'Budget',badge:'used',waMsg:'Pixel 5 Google Pixel UK Used - UGX 800,000'},
-{id:3028,name:'Pixel 5',cond:'Brand New',price:1500000,priceRange:'UGX 1,500,000',specs:'128GB · Budget',series:'Budget',badge:'new',waMsg:'Pixel 5 Google Pixel Brand New - UGX 1,500,000'},
-{id:3029,name:'Pixel 5a',cond:'UK Used',price:900000,priceRange:'UGX 900,000',specs:'128GB · Budget',series:'Budget',badge:'used',waMsg:'Pixel 5a Google Pixel UK Used - UGX 900,000'},
-{id:3030,name:'Pixel 5a',cond:'Brand New',price:1700000,priceRange:'UGX 1,700,000',specs:'128GB · Budget',series:'Budget',badge:'new',waMsg:'Pixel 5a Google Pixel Brand New - UGX 1,700,000'},
-{id:3031,name:'Pixel 4a',cond:'UK Used',price:600000,priceRange:'UGX 600,000',specs:'128GB · Budget',series:'Budget',badge:'used',waMsg:'Pixel 4a Google Pixel UK Used - UGX 600,000'},
-{id:3032,name:'Pixel 4a',cond:'Brand New',price:1200000,priceRange:'UGX 1,200,000',specs:'128GB · Budget',series:'Budget',badge:'new',waMsg:'Pixel 4a Google Pixel Brand New - UGX 1,200,000'},
-{id:3033,name:'Pixel 4 XL',cond:'UK Used',price:700000,priceRange:'UGX 700,000',specs:'64GB/128GB · Budget',series:'Budget',badge:'used',waMsg:'Pixel 4 XL Google Pixel UK Used - UGX 700,000'},
-{id:3034,name:'Pixel 4 XL',cond:'Brand New',price:1500000,priceRange:'UGX 1,500,000',specs:'64GB/128GB · Budget',series:'Budget',badge:'new',waMsg:'Pixel 4 XL Google Pixel Brand New - UGX 1,500,000'},
-{id:3035,name:'Pixel 3 XL',cond:'UK Used',price:500000,priceRange:'UGX 500,000',specs:'64GB/128GB · Budget',series:'Budget',badge:'used',waMsg:'Pixel 3 XL Google Pixel UK Used - UGX 500,000'},
-{id:3036,name:'Pixel 3 XL',cond:'Brand New',price:1000000,priceRange:'UGX 1,000,000',specs:'64GB/128GB · Budget',series:'Budget',badge:'new',waMsg:'Pixel 3 XL Google Pixel Brand New - UGX 1,000,000'}
-];
+<script type="module">
+import { fetchProducts } from './assets/js/supabase.js';
+import { renderProductGrid } from './assets/js/products.js';
 
 const grid = document.getElementById('productsGrid');
 const countEl = document.getElementById('resultsCount');
 const cntAll = document.getElementById('cnt-all');
-cntAll.textContent = PRODUCTS.length;
 
+let ALL_PRODUCTS = [];
 let condFilter = 'all';
 let seriesFilter = 'all';
 let sortMode = 'default';
 
-function fmtUGX(n){ return 'UGX ' + n.toLocaleString('en-US'); }
-
-function render(){
-  let list = PRODUCTS.filter(p => (condFilter==='all'||p.cond===condFilter) && (seriesFilter==='all'||p.series===seriesFilter));
-  if(sortMode==='low') list = list.slice().sort((a,b)=>a.price-b.price);
-  if(sortMode==='high') list = list.slice().sort((a,b)=>b.price-a.price);
+function applyFiltersAndRender(){
+  let list = ALL_PRODUCTS.filter(p =>
+    (condFilter === 'all' || p.condition === condFilter) &&
+    (seriesFilter === 'all' || p.series === seriesFilter)
+  );
+  if (sortMode === 'low')  list = list.slice().sort((a, b) => a.price - b.price);
+  if (sortMode === 'high') list = list.slice().sort((a, b) => b.price - a.price);
   countEl.textContent = list.length + ' phones found';
-  grid.innerHTML = list.map(p => `
-    <div class="prod-card">
-      <span class="prod-card-badge badge-${p.badge}">${p.cond}</span>
-      <div class="prod-img-wrap"><span class="prod-img-placeholder">🔵</span></div>
-      <div class="prod-body">
-        <div class="prod-series">${p.series}</div>
-        <div class="prod-name">${p.name}</div>
-        <div class="prod-specs">${p.specs}</div>
-        <div class="prod-price">${p.priceRange}</div>
-        <a class="prod-btn-wa" target="_blank" href="https://wa.me/256756922058?text=${encodeURIComponent('Hello, I want to buy: ' + p.waMsg)}">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          Ask on WhatsApp
-        </a>
-      </div>
-    </div>
-  `).join('');
+  renderProductGrid(grid, list);
 }
 
-document.querySelectorAll('.filter-btn').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+async function init(){
+  grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text3);">Loading Google Pixel phones…</div>';
+  ALL_PRODUCTS = await fetchProducts({ brand: 'Google Pixel' });
+  cntAll.textContent = ALL_PRODUCTS.length;
+  applyFiltersAndRender();
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     condFilter = btn.dataset.cond;
-    render();
+    applyFiltersAndRender();
   });
 });
-document.getElementById('seriesSelect').addEventListener('change', e=>{ seriesFilter = e.target.value; render(); });
-document.getElementById('sortSelect').addEventListener('change', e=>{ sortMode = e.target.value; render(); });
+document.getElementById('seriesSelect').addEventListener('change', e => { seriesFilter = e.target.value; applyFiltersAndRender(); });
+document.getElementById('sortSelect').addEventListener('change', e => { sortMode = e.target.value; applyFiltersAndRender(); });
 
-render();
+init();
 </script>
 </body>
 </html>
