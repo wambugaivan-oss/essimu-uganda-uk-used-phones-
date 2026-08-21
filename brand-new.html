@@ -68,8 +68,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 5%;background:rgb
 .cat-hero p{font-size:1rem;color:var(--text2);line-height:1.7;max-width:640px;position:relative;}
 .section{padding:32px 6% 88px;}
 .filter-bar{display:flex;gap:10px;align-items:center;margin-bottom:28px;flex-wrap:wrap;}
-.filter-btn{background:var(--surface);border:1px solid var(--border);border-radius:100px;padding:7px 16px;font-size:.78rem;font-weight:600;color:var(--text2);cursor:pointer;transition:all .2s;white-space:nowrap;}
-.filter-btn:hover,.filter-btn.active{background:var(--blue);border-color:var(--blue);color:white;}
 .filter-select{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 14px;font-size:.8rem;color:var(--text);font-family:var(--font-body);outline:none;cursor:pointer;}
 .results-count{font-size:.8rem;color:var(--text3);margin-bottom:18px;}
 .products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;}
@@ -146,7 +144,7 @@ WhatsApp
 <section class="section">
 <div class="filter-bar">
 <span class="results-count" style="margin:0;">All Brand New (<span id="cnt-all">0</span>)</span>
-<select class="filter-select" id="seriesSelect">
+<select class="filter-select" id="brandSelect">
 <option value="all">All Brands</option>
 <option value="Samsung">Samsung</option>
 <option value="Apple">Apple</option>
@@ -166,7 +164,7 @@ WhatsApp
 <option value="high">Price: High to Low</option>
 </select>
 </div>
-<div class="results-count" id="resultsCount"></div>
+<div class="results-count" id="resultsCount">Loading…</div>
 <div class="products-grid" id="productsGrid"></div>
 
 <div class="repair-strip">
@@ -185,10 +183,10 @@ WhatsApp
 <div class="footer-col-title">Categories</div>
 <a href="samsung.html">Samsung Phones</a>
 <a href="iphone.html">iPhones</a>
-<a href="index.html#products">Google Pixel</a>
-<a href="index.html#products">Oppo</a>
-<a href="index.html#products">Redmi</a>
-<a href="index.html#products">Tecno &amp; Others</a>
+<a href="pixel.html">Google Pixel</a>
+<a href="oppo.html">Oppo</a>
+<a href="redmi.html">Redmi</a>
+<a href="tecno.html">Tecno &amp; Others</a>
 </div>
 <div class="footer-col">
 <div class="footer-col-title">Services</div>
@@ -219,310 +217,37 @@ WhatsApp
 <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 
-<script>
-// BRAND NEW PRODUCTS — real data from ESSIMU Uganda Master Price List (compiled 2026-08-04)
-const PRODUCTS = [
-{id:1002,name:'Galaxy S7',brand:'Samsung',cond:'Brand New',price:650000,priceRange:'UGX 650,000',specs:'32GB · 4GB RAM',waMsg:'Galaxy S7 Samsung Brand New - UGX 650,000'},
-{id:1004,name:'Galaxy S7 Edge',brand:'Samsung',cond:'Brand New',price:750000,priceRange:'UGX 750,000 – 850,000',specs:'32GB · 4GB RAM',waMsg:'Galaxy S7 Edge Samsung Brand New - UGX 750,000 – 850,000'},
-{id:1006,name:'Galaxy S8',brand:'Samsung',cond:'Brand New',price:850000,priceRange:'UGX 850,000',specs:'64GB · 4GB RAM',waMsg:'Galaxy S8 Samsung Brand New - UGX 850,000'},
-{id:1008,name:'Galaxy S8+',brand:'Samsung',cond:'Brand New',price:950000,priceRange:'UGX 950,000 – 1,050,000',specs:'64GB · 4GB RAM',waMsg:'Galaxy S8+ Samsung Brand New - UGX 950,000 – 1,050,000'},
-{id:1010,name:'Galaxy S9',brand:'Samsung',cond:'Brand New',price:950000,priceRange:'UGX 950,000 – 1,050,000',specs:'64GB · 4GB RAM',waMsg:'Galaxy S9 Samsung Brand New - UGX 950,000 – 1,050,000'},
-{id:1012,name:'Galaxy S9+',brand:'Samsung',cond:'Brand New',price:1100000,priceRange:'UGX 1,100,000 – 1,200,000',specs:'64GB · 6GB RAM',waMsg:'Galaxy S9+ Samsung Brand New - UGX 1,100,000 – 1,200,000'},
-{id:1014,name:'Galaxy S10e',brand:'Samsung',cond:'Brand New',price:1200000,priceRange:'UGX 1,200,000',specs:'128GB · 6GB RAM',waMsg:'Galaxy S10e Samsung Brand New - UGX 1,200,000'},
-{id:1016,name:'Galaxy S10',brand:'Samsung',cond:'Brand New',price:1400000,priceRange:'UGX 1,400,000 – 1,700,000',specs:'128GB · 8GB RAM',waMsg:'Galaxy S10 Samsung Brand New - UGX 1,400,000 – 1,700,000'},
-{id:1018,name:'Galaxy S10+',brand:'Samsung',cond:'Brand New',price:1600000,priceRange:'UGX 1,600,000 – 1,900,000',specs:'128GB · 8GB RAM',waMsg:'Galaxy S10+ Samsung Brand New - UGX 1,600,000 – 1,900,000'},
-{id:1020,name:'Galaxy S10 5G',brand:'Samsung',cond:'Brand New',price:1900000,priceRange:'UGX 1,900,000',specs:'256GB · 8GB RAM',waMsg:'Galaxy S10 5G Samsung Brand New - UGX 1,900,000'},
-{id:1022,name:'Galaxy S20',brand:'Samsung',cond:'Brand New',price:1700000,priceRange:'UGX 1,700,000',specs:'128GB · 8GB RAM',waMsg:'Galaxy S20 Samsung Brand New - UGX 1,700,000'},
-{id:1024,name:'Galaxy S20+',brand:'Samsung',cond:'Brand New',price:1900000,priceRange:'UGX 1,900,000 – 2,300,000',specs:'128GB · 8GB RAM',waMsg:'Galaxy S20+ Samsung Brand New - UGX 1,900,000 – 2,300,000'},
-{id:1026,name:'Galaxy S20 Ultra',brand:'Samsung',cond:'Brand New',price:2300000,priceRange:'UGX 2,300,000 – 2,800,000',specs:'128GB · 12GB RAM',waMsg:'Galaxy S20 Ultra Samsung Brand New - UGX 2,300,000 – 2,800,000'},
-{id:1028,name:'Galaxy S20 FE 4G',brand:'Samsung',cond:'Brand New',price:1400000,priceRange:'UGX 1,400,000',specs:'128GB · 6GB RAM',waMsg:'Galaxy S20 FE 4G Samsung Brand New - UGX 1,400,000'},
-{id:1030,name:'Galaxy S20 FE 5G',brand:'Samsung',cond:'Brand New',price:1600000,priceRange:'UGX 1,600,000',specs:'128GB · 8GB RAM',waMsg:'Galaxy S20 FE 5G Samsung Brand New - UGX 1,600,000'},
-{id:1032,name:'Galaxy S21',brand:'Samsung',cond:'Brand New',price:1800000,priceRange:'UGX 1,800,000 – 2,000,000',specs:'128GB · 8GB RAM',waMsg:'Galaxy S21 Samsung Brand New - UGX 1,800,000 – 2,000,000'},
-{id:1034,name:'Galaxy S21+',brand:'Samsung',cond:'Brand New',price:2100000,priceRange:'UGX 2,100,000 – 2,300,000',specs:'128GB · 8GB RAM',waMsg:'Galaxy S21+ Samsung Brand New - UGX 2,100,000 – 2,300,000'},
-{id:1036,name:'Galaxy S21 Ultra',brand:'Samsung',cond:'Brand New',price:2500000,priceRange:'UGX 2,500,000 – 3,000,000',specs:'128GB · 12GB RAM',waMsg:'Galaxy S21 Ultra Samsung Brand New - UGX 2,500,000 – 3,000,000'},
-{id:1038,name:'Galaxy S21 FE',brand:'Samsung',cond:'Brand New',price:1600000,priceRange:'UGX 1,600,000',specs:'128GB · 6GB RAM',waMsg:'Galaxy S21 FE Samsung Brand New - UGX 1,600,000'},
-{id:1040,name:'Galaxy S22',brand:'Samsung',cond:'Brand New',price:2000000,priceRange:'UGX 2,000,000 – 2,200,000',specs:'128GB · 8GB RAM',waMsg:'Galaxy S22 Samsung Brand New - UGX 2,000,000 – 2,200,000'},
-{id:1042,name:'Galaxy S22+',brand:'Samsung',cond:'Brand New',price:2300000,priceRange:'UGX 2,300,000 – 2,500,000',specs:'128GB · 8GB RAM',waMsg:'Galaxy S22+ Samsung Brand New - UGX 2,300,000 – 2,500,000'},
-{id:1044,name:'Galaxy S22 Ultra',brand:'Samsung',cond:'Brand New',price:2800000,priceRange:'UGX 2,800,000 – 3,700,000',specs:'128GB · 8GB RAM',waMsg:'Galaxy S22 Ultra Samsung Brand New - UGX 2,800,000 – 3,700,000'},
-{id:1046,name:'Galaxy S23',brand:'Samsung',cond:'Brand New',price:2400000,priceRange:'UGX 2,400,000 – 2,600,000',specs:'128GB · 8GB RAM',waMsg:'Galaxy S23 Samsung Brand New - UGX 2,400,000 – 2,600,000'},
-{id:1048,name:'Galaxy S23+',brand:'Samsung',cond:'Brand New',price:2900000,priceRange:'UGX 2,900,000 – 3,200,000',specs:'256GB · 8GB RAM',waMsg:'Galaxy S23+ Samsung Brand New - UGX 2,900,000 – 3,200,000'},
-{id:1050,name:'Galaxy S23 Ultra',brand:'Samsung',cond:'Brand New',price:3500000,priceRange:'UGX 3,500,000 – 4,200,000',specs:'256GB · 8GB RAM',waMsg:'Galaxy S23 Ultra Samsung Brand New - UGX 3,500,000 – 4,200,000'},
-{id:1052,name:'Galaxy S23 FE',brand:'Samsung',cond:'Brand New',price:1900000,priceRange:'UGX 1,900,000 – 2,100,000',specs:'128GB · 8GB RAM',waMsg:'Galaxy S23 FE Samsung Brand New - UGX 1,900,000 – 2,100,000'},
-{id:1054,name:'Galaxy S24',brand:'Samsung',cond:'Brand New',price:2800000,priceRange:'UGX 2,800,000 – 3,000,000',specs:'128GB · 8GB RAM',waMsg:'Galaxy S24 Samsung Brand New - UGX 2,800,000 – 3,000,000'},
-{id:1056,name:'Galaxy S24+',brand:'Samsung',cond:'Brand New',price:3400000,priceRange:'UGX 3,400,000 – 3,700,000',specs:'256GB · 12GB RAM',waMsg:'Galaxy S24+ Samsung Brand New - UGX 3,400,000 – 3,700,000'},
-{id:1058,name:'Galaxy S24 Ultra',brand:'Samsung',cond:'Brand New',price:4000000,priceRange:'UGX 4,000,000 – 4,900,000',specs:'256GB · 12GB RAM',waMsg:'Galaxy S24 Ultra Samsung Brand New - UGX 4,000,000 – 4,900,000'},
-{id:1060,name:'Galaxy S24 FE',brand:'Samsung',cond:'Brand New',price:2300000,priceRange:'UGX 2,300,000 – 2,600,000',specs:'128GB · 8GB RAM',waMsg:'Galaxy S24 FE Samsung Brand New - UGX 2,300,000 – 2,600,000'},
-{id:1062,name:'Galaxy S25',brand:'Samsung',cond:'Brand New',price:3000000,priceRange:'UGX 3,000,000 – 3,300,000',specs:'128GB · 12GB RAM',waMsg:'Galaxy S25 Samsung Brand New - UGX 3,000,000 – 3,300,000'},
-{id:1064,name:'Galaxy S25+',brand:'Samsung',cond:'Brand New',price:3600000,priceRange:'UGX 3,600,000 – 4,000,000',specs:'256GB · 12GB RAM',waMsg:'Galaxy S25+ Samsung Brand New - UGX 3,600,000 – 4,000,000'},
-{id:1066,name:'Galaxy S25 Ultra',brand:'Samsung',cond:'Brand New',price:4500000,priceRange:'UGX 4,500,000 – 5,300,000',specs:'256GB · 12GB RAM',waMsg:'Galaxy S25 Ultra Samsung Brand New - UGX 4,500,000 – 5,300,000'},
-{id:1068,name:'Galaxy S25 Edge',brand:'Samsung',cond:'Brand New',price:4000000,priceRange:'UGX 4,000,000',specs:'256GB · 12GB RAM',waMsg:'Galaxy S25 Edge Samsung Brand New - UGX 4,000,000'},
-{id:1070,name:'Galaxy S26',brand:'Samsung',cond:'Brand New',price:3200000,priceRange:'UGX 3,200,000 – 3,600,000',specs:'256GB · 12GB RAM',waMsg:'Galaxy S26 Samsung Brand New - UGX 3,200,000 – 3,600,000'},
-{id:1072,name:'Galaxy S26+',brand:'Samsung',cond:'Brand New',price:3700000,priceRange:'UGX 3,700,000 – 4,100,000',specs:'256GB · 12GB RAM',waMsg:'Galaxy S26+ Samsung Brand New - UGX 3,700,000 – 4,100,000'},
-{id:1074,name:'Galaxy S26 Ultra',brand:'Samsung',cond:'Brand New',price:4100000,priceRange:'UGX 4,100,000 – 5,250,000',specs:'256GB · 12GB RAM',waMsg:'Galaxy S26 Ultra Samsung Brand New - UGX 4,100,000 – 5,250,000'},
-{id:1076,name:'Galaxy Note 8',brand:'Samsung',cond:'Brand New',price:900000,priceRange:'UGX 900,000 – 1,000,000',specs:'64GB · 6GB RAM',waMsg:'Galaxy Note 8 Samsung Brand New - UGX 900,000 – 1,000,000'},
-{id:1078,name:'Galaxy Note 9',brand:'Samsung',cond:'Brand New',price:1100000,priceRange:'UGX 1,100,000 – 1,400,000',specs:'128GB · 6GB RAM',waMsg:'Galaxy Note 9 Samsung Brand New - UGX 1,100,000 – 1,400,000'},
-{id:1080,name:'Galaxy Note 10',brand:'Samsung',cond:'Brand New',price:1500000,priceRange:'UGX 1,500,000',specs:'256GB · 8GB RAM',waMsg:'Galaxy Note 10 Samsung Brand New - UGX 1,500,000'},
-{id:1082,name:'Galaxy Note 10+',brand:'Samsung',cond:'Brand New',price:1800000,priceRange:'UGX 1,800,000 – 2,000,000',specs:'256GB · 12GB RAM',waMsg:'Galaxy Note 10+ Samsung Brand New - UGX 1,800,000 – 2,000,000'},
-{id:1084,name:'Galaxy Note 20',brand:'Samsung',cond:'Brand New',price:2000000,priceRange:'UGX 2,000,000',specs:'256GB · 8GB RAM',waMsg:'Galaxy Note 20 Samsung Brand New - UGX 2,000,000'},
-{id:1086,name:'Galaxy Note 20 Ultra',brand:'Samsung',cond:'Brand New',price:2600000,priceRange:'UGX 2,600,000 – 2,900,000',specs:'256GB · 12GB RAM',waMsg:'Galaxy Note 20 Ultra Samsung Brand New - UGX 2,600,000 – 2,900,000'},
-{id:1088,name:'Galaxy Fold (1st Gen)',brand:'Samsung',cond:'Brand New',price:2500000,priceRange:'UGX 2,500,000',specs:'512GB · 12GB RAM',waMsg:'Galaxy Fold (1st Gen) Samsung Brand New - UGX 2,500,000'},
-{id:1090,name:'Galaxy Z Fold2',brand:'Samsung',cond:'Brand New',price:3000000,priceRange:'UGX 3,000,000 – 3,300,000',specs:'256GB · 12GB RAM',waMsg:'Galaxy Z Fold2 Samsung Brand New - UGX 3,000,000 – 3,300,000'},
-{id:1092,name:'Galaxy Z Fold3',brand:'Samsung',cond:'Brand New',price:3800000,priceRange:'UGX 3,800,000 – 4,200,000',specs:'256GB · 12GB RAM',waMsg:'Galaxy Z Fold3 Samsung Brand New - UGX 3,800,000 – 4,200,000'},
-{id:1094,name:'Galaxy Z Fold4',brand:'Samsung',cond:'Brand New',price:4300000,priceRange:'UGX 4,300,000 – 5,200,000',specs:'256GB · 12GB RAM',waMsg:'Galaxy Z Fold4 Samsung Brand New - UGX 4,300,000 – 5,200,000'},
-{id:1096,name:'Galaxy Z Fold5',brand:'Samsung',cond:'Brand New',price:5000000,priceRange:'UGX 5,000,000 – 5,900,000',specs:'256GB · 12GB RAM',waMsg:'Galaxy Z Fold5 Samsung Brand New - UGX 5,000,000 – 5,900,000'},
-{id:1098,name:'Galaxy Z Fold6',brand:'Samsung',cond:'Brand New',price:5500000,priceRange:'UGX 5,500,000 – 6,400,000',specs:'256GB · 12GB RAM',waMsg:'Galaxy Z Fold6 Samsung Brand New - UGX 5,500,000 – 6,400,000'},
-{id:1100,name:'Galaxy Z Fold7',brand:'Samsung',cond:'Brand New',price:6000000,priceRange:'UGX 6,000,000 – 6,900,000',specs:'256GB · 12GB RAM',waMsg:'Galaxy Z Fold7 Samsung Brand New - UGX 6,000,000 – 6,900,000'},
-{id:1102,name:'Galaxy Z Fold8',brand:'Samsung',cond:'Brand New',price:6500000,priceRange:'UGX 6,500,000 – 7,000,000',specs:'256GB · 12GB RAM',waMsg:'Galaxy Z Fold8 Samsung Brand New - UGX 6,500,000 – 7,000,000'},
-{id:1104,name:'Galaxy Z Fold8 Ultra',brand:'Samsung',cond:'Brand New',price:7800000,priceRange:'UGX 7,800,000 – 8,500,000',specs:'512GB · 16GB RAM',waMsg:'Galaxy Z Fold8 Ultra Samsung Brand New - UGX 7,800,000 – 8,500,000'},
-{id:1106,name:'Galaxy Z Flip',brand:'Samsung',cond:'Brand New',price:2800000,priceRange:'UGX 2,800,000',specs:'256GB · 8GB RAM',waMsg:'Galaxy Z Flip Samsung Brand New - UGX 2,800,000'},
-{id:1108,name:'Galaxy Z Flip 5G',brand:'Samsung',cond:'Brand New',price:3000000,priceRange:'UGX 3,000,000',specs:'256GB · 8GB RAM',waMsg:'Galaxy Z Flip 5G Samsung Brand New - UGX 3,000,000'},
-{id:1110,name:'Galaxy Z Flip3',brand:'Samsung',cond:'Brand New',price:3200000,priceRange:'UGX 3,200,000 – 3,500,000',specs:'128GB · 8GB RAM',waMsg:'Galaxy Z Flip3 Samsung Brand New - UGX 3,200,000 – 3,500,000'},
-{id:1112,name:'Galaxy Z Flip4',brand:'Samsung',cond:'Brand New',price:3800000,priceRange:'UGX 3,800,000 – 4,500,000',specs:'128GB · 8GB RAM',waMsg:'Galaxy Z Flip4 Samsung Brand New - UGX 3,800,000 – 4,500,000'},
-{id:1114,name:'Galaxy Z Flip5',brand:'Samsung',cond:'Brand New',price:4500000,priceRange:'UGX 4,500,000 – 4,900,000',specs:'256GB · 8GB RAM',waMsg:'Galaxy Z Flip5 Samsung Brand New - UGX 4,500,000 – 4,900,000'},
-{id:1116,name:'Galaxy Z Flip6',brand:'Samsung',cond:'Brand New',price:5000000,priceRange:'UGX 5,000,000 – 5,400,000',specs:'256GB · 12GB RAM',waMsg:'Galaxy Z Flip6 Samsung Brand New - UGX 5,000,000 – 5,400,000'},
-{id:1118,name:'Galaxy Z Flip7',brand:'Samsung',cond:'Brand New',price:5300000,priceRange:'UGX 5,300,000 – 5,700,000',specs:'256GB · 12GB RAM',waMsg:'Galaxy Z Flip7 Samsung Brand New - UGX 5,300,000 – 5,700,000'},
-{id:1120,name:'Galaxy Z Flip8',brand:'Samsung',cond:'Brand New',price:5800000,priceRange:'UGX 5,800,000 – 6,200,000',specs:'256GB · 12GB RAM',waMsg:'Galaxy Z Flip8 Samsung Brand New - UGX 5,800,000 – 6,200,000'},
-{id:1122,name:'Galaxy A01',brand:'Samsung',cond:'Brand New',price:450000,priceRange:'UGX 450,000',specs:'16GB · 2GB RAM',waMsg:'Galaxy A01 Samsung Brand New - UGX 450,000'},
-{id:1124,name:'Galaxy A01 Core',brand:'Samsung',cond:'Brand New',price:350000,priceRange:'UGX 350,000',specs:'16GB · 1GB/2GB RAM',waMsg:'Galaxy A01 Core Samsung Brand New - UGX 350,000'},
-{id:1126,name:'Galaxy A02',brand:'Samsung',cond:'Brand New',price:500000,priceRange:'UGX 500,000 – 600,000',specs:'32GB · 2GB RAM',waMsg:'Galaxy A02 Samsung Brand New - UGX 500,000 – 600,000'},
-{id:1128,name:'Galaxy A02s',brand:'Samsung',cond:'Brand New',price:550000,priceRange:'UGX 550,000 – 650,000',specs:'32GB · 3GB RAM',waMsg:'Galaxy A02s Samsung Brand New - UGX 550,000 – 650,000'},
-{id:1130,name:'Galaxy A03 Core',brand:'Samsung',cond:'Brand New',price:400000,priceRange:'UGX 400,000',specs:'32GB · 2GB RAM',waMsg:'Galaxy A03 Core Samsung Brand New - UGX 400,000'},
-{id:1132,name:'Galaxy A03',brand:'Samsung',cond:'Brand New',price:550000,priceRange:'UGX 550,000 – 650,000',specs:'32GB · 3GB RAM',waMsg:'Galaxy A03 Samsung Brand New - UGX 550,000 – 650,000'},
-{id:1134,name:'Galaxy A03s',brand:'Samsung',cond:'Brand New',price:600000,priceRange:'UGX 600,000 – 700,000',specs:'32GB · 3GB RAM',waMsg:'Galaxy A03s Samsung Brand New - UGX 600,000 – 700,000'},
-{id:1136,name:'Galaxy A04',brand:'Samsung',cond:'Brand New',price:600000,priceRange:'UGX 600,000 – 700,000',specs:'32GB · 3GB RAM',waMsg:'Galaxy A04 Samsung Brand New - UGX 600,000 – 700,000'},
-{id:1138,name:'Galaxy A04s',brand:'Samsung',cond:'Brand New',price:650000,priceRange:'UGX 650,000 – 750,000',specs:'32GB · 3GB RAM',waMsg:'Galaxy A04s Samsung Brand New - UGX 650,000 – 750,000'},
-{id:1140,name:'Galaxy A04e',brand:'Samsung',cond:'Brand New',price:600000,priceRange:'UGX 600,000',specs:'32GB · 3GB RAM',waMsg:'Galaxy A04e Samsung Brand New - UGX 600,000'},
-{id:1142,name:'Galaxy A05',brand:'Samsung',cond:'Brand New',price:750000,priceRange:'UGX 750,000 – 850,000',specs:'64GB · 4GB RAM',waMsg:'Galaxy A05 Samsung Brand New - UGX 750,000 – 850,000'},
-{id:1144,name:'Galaxy A05s',brand:'Samsung',cond:'Brand New',price:850000,priceRange:'UGX 850,000 – 950,000',specs:'64GB · 4GB RAM',waMsg:'Galaxy A05s Samsung Brand New - UGX 850,000 – 950,000'},
-{id:1146,name:'Galaxy A06',brand:'Samsung',cond:'Brand New',price:750000,priceRange:'UGX 750,000 – 900,000',specs:'64GB · 4GB RAM',waMsg:'Galaxy A06 Samsung Brand New - UGX 750,000 – 900,000'},
-{id:1148,name:'Galaxy A10',brand:'Samsung',cond:'Brand New',price:550000,priceRange:'UGX 550,000',specs:'32GB · 2GB RAM',waMsg:'Galaxy A10 Samsung Brand New - UGX 550,000'},
-{id:1150,name:'Galaxy A10s',brand:'Samsung',cond:'Brand New',price:600000,priceRange:'UGX 600,000',specs:'32GB · 2GB RAM',waMsg:'Galaxy A10s Samsung Brand New - UGX 600,000'},
-{id:1152,name:'Galaxy A11',brand:'Samsung',cond:'Brand New',price:650000,priceRange:'UGX 650,000',specs:'32GB · 3GB RAM',waMsg:'Galaxy A11 Samsung Brand New - UGX 650,000'},
-{id:1154,name:'Galaxy A12',brand:'Samsung',cond:'Brand New',price:700000,priceRange:'UGX 700,000 – 950,000',specs:'32GB · 3GB RAM',waMsg:'Galaxy A12 Samsung Brand New - UGX 700,000 – 950,000'},
-{id:1156,name:'Galaxy A13',brand:'Samsung',cond:'Brand New',price:800000,priceRange:'UGX 800,000 – 1,050,000',specs:'32GB · 3GB RAM',waMsg:'Galaxy A13 Samsung Brand New - UGX 800,000 – 1,050,000'},
-{id:1158,name:'Galaxy A14',brand:'Samsung',cond:'Brand New',price:950000,priceRange:'UGX 950,000 – 1,100,000',specs:'64GB · 4GB RAM',waMsg:'Galaxy A14 Samsung Brand New - UGX 950,000 – 1,100,000'},
-{id:1160,name:'Galaxy A14 5G',brand:'Samsung',cond:'Brand New',price:1100000,priceRange:'UGX 1,100,000 – 1,250,000',specs:'64GB · 4GB RAM',waMsg:'Galaxy A14 5G Samsung Brand New - UGX 1,100,000 – 1,250,000'},
-{id:1162,name:'Galaxy A15',brand:'Samsung',cond:'Brand New',price:1100000,priceRange:'UGX 1,100,000 – 1,450,000',specs:'128GB · 4GB RAM',waMsg:'Galaxy A15 Samsung Brand New - UGX 1,100,000 – 1,450,000'},
-{id:1164,name:'Galaxy A15 5G',brand:'Samsung',cond:'Brand New',price:1400000,priceRange:'UGX 1,400,000',specs:'128GB · 4GB/6GB RAM',waMsg:'Galaxy A15 5G Samsung Brand New - UGX 1,400,000'},
-{id:1166,name:'Galaxy A16',brand:'Samsung',cond:'Brand New',price:1200000,priceRange:'UGX 1,200,000 – 1,500,000',specs:'128GB · 4GB RAM',waMsg:'Galaxy A16 Samsung Brand New - UGX 1,200,000 – 1,500,000'},
-{id:1168,name:'Galaxy A16 5G',brand:'Samsung',cond:'Brand New',price:1400000,priceRange:'UGX 1,400,000',specs:'128GB · 4GB/6GB RAM',waMsg:'Galaxy A16 5G Samsung Brand New - UGX 1,400,000'},
-{id:1170,name:'Galaxy A22',brand:'Samsung',cond:'Brand New',price:1000000,priceRange:'UGX 1,000,000 – 1,200,000',specs:'64GB · 4GB RAM',waMsg:'Galaxy A22 Samsung Brand New - UGX 1,000,000 – 1,200,000'},
-{id:1172,name:'Galaxy A22 5G',brand:'Samsung',cond:'Brand New',price:1100000,priceRange:'UGX 1,100,000',specs:'64GB · 4GB RAM',waMsg:'Galaxy A22 5G Samsung Brand New - UGX 1,100,000'},
-{id:1174,name:'Galaxy A23',brand:'Samsung',cond:'Brand New',price:1100000,priceRange:'UGX 1,100,000 – 1,300,000',specs:'64GB · 4GB RAM',waMsg:'Galaxy A23 Samsung Brand New - UGX 1,100,000 – 1,300,000'},
-{id:1176,name:'Galaxy A23 5G',brand:'Samsung',cond:'Brand New',price:1400000,priceRange:'UGX 1,400,000',specs:'128GB · 4GB/6GB RAM',waMsg:'Galaxy A23 5G Samsung Brand New - UGX 1,400,000'},
-{id:1178,name:'Galaxy A24',brand:'Samsung',cond:'Brand New',price:1300000,priceRange:'UGX 1,300,000 – 1,500,000',specs:'128GB · 4GB/6GB RAM',waMsg:'Galaxy A24 Samsung Brand New - UGX 1,300,000 – 1,500,000'},
-{id:1180,name:'Galaxy A25 5G',brand:'Samsung',cond:'Brand New',price:1500000,priceRange:'UGX 1,500,000 – 1,700,000',specs:'128GB · 6GB RAM',waMsg:'Galaxy A25 5G Samsung Brand New - UGX 1,500,000 – 1,700,000'},
-{id:1182,name:'Galaxy A26 5G',brand:'Samsung',cond:'Brand New',price:1700000,priceRange:'UGX 1,700,000 – 1,900,000',specs:'128GB · 6GB RAM',waMsg:'Galaxy A26 5G Samsung Brand New - UGX 1,700,000 – 1,900,000'},
-{id:1184,name:'Galaxy A31',brand:'Samsung',cond:'Brand New',price:1100000,priceRange:'UGX 1,100,000 – 1,300,000',specs:'64GB · 4GB RAM',waMsg:'Galaxy A31 Samsung Brand New - UGX 1,100,000 – 1,300,000'},
-{id:1186,name:'Galaxy A32',brand:'Samsung',cond:'Brand New',price:1200000,priceRange:'UGX 1,200,000 – 1,400,000',specs:'64GB · 4GB RAM',waMsg:'Galaxy A32 Samsung Brand New - UGX 1,200,000 – 1,400,000'},
-{id:1188,name:'Galaxy A32 5G',brand:'Samsung',cond:'Brand New',price:1300000,priceRange:'UGX 1,300,000',specs:'64GB · 4GB RAM',waMsg:'Galaxy A32 5G Samsung Brand New - UGX 1,300,000'},
-{id:1190,name:'Galaxy A33 5G',brand:'Samsung',cond:'Brand New',price:1500000,priceRange:'UGX 1,500,000 – 1,700,000',specs:'128GB · 6GB RAM',waMsg:'Galaxy A33 5G Samsung Brand New - UGX 1,500,000 – 1,700,000'},
-{id:1192,name:'Galaxy A34 5G',brand:'Samsung',cond:'Brand New',price:1700000,priceRange:'UGX 1,700,000 – 1,900,000',specs:'128GB · 6GB RAM',waMsg:'Galaxy A34 5G Samsung Brand New - UGX 1,700,000 – 1,900,000'},
-{id:1194,name:'Galaxy A35 5G',brand:'Samsung',cond:'Brand New',price:2000000,priceRange:'UGX 2,000,000 – 2,200,000',specs:'128GB · 6GB RAM',waMsg:'Galaxy A35 5G Samsung Brand New - UGX 2,000,000 – 2,200,000'},
-{id:1196,name:'Galaxy A36 5G',brand:'Samsung',cond:'Brand New',price:2200000,priceRange:'UGX 2,200,000 – 2,500,000',specs:'128GB · 6GB RAM',waMsg:'Galaxy A36 5G Samsung Brand New - UGX 2,200,000 – 2,500,000'},
-{id:1198,name:'Galaxy A50',brand:'Samsung',cond:'Brand New',price:1000000,priceRange:'UGX 1,000,000 – 1,200,000',specs:'64GB · 4GB RAM',waMsg:'Galaxy A50 Samsung Brand New - UGX 1,000,000 – 1,200,000'},
-{id:1200,name:'Galaxy A51',brand:'Samsung',cond:'Brand New',price:1100000,priceRange:'UGX 1,100,000 – 1,300,000',specs:'64GB · 4GB RAM',waMsg:'Galaxy A51 Samsung Brand New - UGX 1,100,000 – 1,300,000'},
-{id:1202,name:'Galaxy A51 5G',brand:'Samsung',cond:'Brand New',price:1500000,priceRange:'UGX 1,500,000',specs:'128GB · 6GB RAM',waMsg:'Galaxy A51 5G Samsung Brand New - UGX 1,500,000'},
-{id:1204,name:'Galaxy A52',brand:'Samsung',cond:'Brand New',price:1500000,priceRange:'UGX 1,500,000 – 1,900,000',specs:'128GB · 6GB RAM',waMsg:'Galaxy A52 Samsung Brand New - UGX 1,500,000 – 1,900,000'},
-{id:1206,name:'Galaxy A52 5G',brand:'Samsung',cond:'Brand New',price:1700000,priceRange:'UGX 1,700,000',specs:'128GB · 6GB RAM',waMsg:'Galaxy A52 5G Samsung Brand New - UGX 1,700,000'},
-{id:1208,name:'Galaxy A52s 5G',brand:'Samsung',cond:'Brand New',price:1800000,priceRange:'UGX 1,800,000 – 2,000,000',specs:'128GB · 6GB RAM',waMsg:'Galaxy A52s 5G Samsung Brand New - UGX 1,800,000 – 2,000,000'},
-{id:1210,name:'Galaxy A53 5G',brand:'Samsung',cond:'Brand New',price:1700000,priceRange:'UGX 1,700,000 – 2,100,000',specs:'128GB · 6GB RAM',waMsg:'Galaxy A53 5G Samsung Brand New - UGX 1,700,000 – 2,100,000'},
-{id:1212,name:'Galaxy A54 5G',brand:'Samsung',cond:'Brand New',price:2000000,priceRange:'UGX 2,000,000 – 2,300,000',specs:'128GB · 8GB RAM',waMsg:'Galaxy A54 5G Samsung Brand New - UGX 2,000,000 – 2,300,000'},
-{id:1214,name:'Galaxy A55 5G',brand:'Samsung',cond:'Brand New',price:2400000,priceRange:'UGX 2,400,000 – 2,700,000',specs:'128GB · 8GB RAM',waMsg:'Galaxy A55 5G Samsung Brand New - UGX 2,400,000 – 2,700,000'},
-{id:1216,name:'Galaxy A56 5G',brand:'Samsung',cond:'Brand New',price:2700000,priceRange:'UGX 2,700,000 – 3,000,000',specs:'128GB · 8GB RAM',waMsg:'Galaxy A56 5G Samsung Brand New - UGX 2,700,000 – 3,000,000'},
-{id:1218,name:'Galaxy A72',brand:'Samsung',cond:'Brand New',price:1600000,priceRange:'UGX 1,600,000 – 1,900,000',specs:'128GB · 6GB RAM',waMsg:'Galaxy A72 Samsung Brand New - UGX 1,600,000 – 1,900,000'},
-{id:1220,name:'Galaxy A73 5G',brand:'Samsung',cond:'Brand New',price:2000000,priceRange:'UGX 2,000,000 – 2,300,000',specs:'128GB · 6GB RAM',waMsg:'Galaxy A73 5G Samsung Brand New - UGX 2,000,000 – 2,300,000'},
-{id:2002,name:'iPhone 8',brand:'Apple',cond:'Brand New',price:450000,priceRange:'UGX 450,000 – 550,000',specs:'64GB · 2GB RAM',waMsg:'iPhone 8 Apple Brand New - UGX 450,000 – 550,000'},
-{id:2004,name:'iPhone 8 Plus',brand:'Apple',cond:'Brand New',price:550000,priceRange:'UGX 550,000 – 650,000',specs:'64GB · 3GB RAM',waMsg:'iPhone 8 Plus Apple Brand New - UGX 550,000 – 650,000'},
-{id:2006,name:'iPhone X',brand:'Apple',cond:'Brand New',price:600000,priceRange:'UGX 600,000 – 700,000',specs:'64GB · 3GB RAM',waMsg:'iPhone X Apple Brand New - UGX 600,000 – 700,000'},
-{id:2008,name:'iPhone XR',brand:'Apple',cond:'Brand New',price:650000,priceRange:'UGX 650,000 – 800,000',specs:'64GB · 3GB RAM',waMsg:'iPhone XR Apple Brand New - UGX 650,000 – 800,000'},
-{id:2010,name:'iPhone XS',brand:'Apple',cond:'Brand New',price:750000,priceRange:'UGX 750,000 – 950,000',specs:'64GB · 4GB RAM',waMsg:'iPhone XS Apple Brand New - UGX 750,000 – 950,000'},
-{id:2012,name:'iPhone XS Max',brand:'Apple',cond:'Brand New',price:850000,priceRange:'UGX 850,000 – 1,100,000',specs:'64GB · 4GB RAM',waMsg:'iPhone XS Max Apple Brand New - UGX 850,000 – 1,100,000'},
-{id:2014,name:'iPhone 11',brand:'Apple',cond:'Brand New',price:850000,priceRange:'UGX 850,000 – 1,050,000',specs:'64GB · 4GB RAM',waMsg:'iPhone 11 Apple Brand New - UGX 850,000 – 1,050,000'},
-{id:2016,name:'iPhone 11 Pro',brand:'Apple',cond:'Brand New',price:1100000,priceRange:'UGX 1,100,000 – 1,400,000',specs:'64GB · 4GB RAM',waMsg:'iPhone 11 Pro Apple Brand New - UGX 1,100,000 – 1,400,000'},
-{id:2018,name:'iPhone 11 Pro Max',brand:'Apple',cond:'Brand New',price:1250000,priceRange:'UGX 1,250,000 – 1,600,000',specs:'64GB · 4GB RAM',waMsg:'iPhone 11 Pro Max Apple Brand New - UGX 1,250,000 – 1,600,000'},
-{id:2020,name:'iPhone SE (2020)',brand:'Apple',cond:'Brand New',price:650000,priceRange:'UGX 650,000 – 850,000',specs:'64GB · 3GB RAM',waMsg:'iPhone SE (2020) Apple Brand New - UGX 650,000 – 850,000'},
-{id:2022,name:'iPhone SE (2022)',brand:'Apple',cond:'Brand New',price:850000,priceRange:'UGX 850,000 – 1,100,000',specs:'64GB · 4GB RAM',waMsg:'iPhone SE (2022) Apple Brand New - UGX 850,000 – 1,100,000'},
-{id:2024,name:'iPhone 12 Mini',brand:'Apple',cond:'Brand New',price:900000,priceRange:'UGX 900,000 – 1,150,000',specs:'64GB · 4GB RAM',waMsg:'iPhone 12 Mini Apple Brand New - UGX 900,000 – 1,150,000'},
-{id:2026,name:'iPhone 12',brand:'Apple',cond:'Brand New',price:1000000,priceRange:'UGX 1,000,000 – 1,250,000',specs:'64GB · 4GB RAM',waMsg:'iPhone 12 Apple Brand New - UGX 1,000,000 – 1,250,000'},
-{id:2028,name:'iPhone 12 Pro',brand:'Apple',cond:'Brand New',price:1400000,priceRange:'UGX 1,400,000 – 1,750,000',specs:'128GB · 6GB RAM',waMsg:'iPhone 12 Pro Apple Brand New - UGX 1,400,000 – 1,750,000'},
-{id:2030,name:'iPhone 12 Pro Max',brand:'Apple',cond:'Brand New',price:1600000,priceRange:'UGX 1,600,000 – 2,000,000',specs:'128GB · 6GB RAM',waMsg:'iPhone 12 Pro Max Apple Brand New - UGX 1,600,000 – 2,000,000'},
-{id:2032,name:'iPhone 13 Mini',brand:'Apple',cond:'Brand New',price:1200000,priceRange:'UGX 1,200,000 – 1,550,000',specs:'128GB · 4GB RAM',waMsg:'iPhone 13 Mini Apple Brand New - UGX 1,200,000 – 1,550,000'},
-{id:2034,name:'iPhone 13',brand:'Apple',cond:'Brand New',price:1300000,priceRange:'UGX 1,300,000 – 1,700,000',specs:'128GB · 4GB RAM',waMsg:'iPhone 13 Apple Brand New - UGX 1,300,000 – 1,700,000'},
-{id:2036,name:'iPhone 13 Pro',brand:'Apple',cond:'Brand New',price:1800000,priceRange:'UGX 1,800,000 – 2,600,000',specs:'128GB · 6GB RAM',waMsg:'iPhone 13 Pro Apple Brand New - UGX 1,800,000 – 2,600,000'},
-{id:2038,name:'iPhone 13 Pro Max',brand:'Apple',cond:'Brand New',price:2000000,priceRange:'UGX 2,000,000 – 2,900,000',specs:'128GB · 6GB RAM',waMsg:'iPhone 13 Pro Max Apple Brand New - UGX 2,000,000 – 2,900,000'},
-{id:2040,name:'iPhone 14',brand:'Apple',cond:'Brand New',price:1500000,priceRange:'UGX 1,500,000 – 2,000,000',specs:'128GB · 6GB RAM',waMsg:'iPhone 14 Apple Brand New - UGX 1,500,000 – 2,000,000'},
-{id:2042,name:'iPhone 14 Plus',brand:'Apple',cond:'Brand New',price:1700000,priceRange:'UGX 1,700,000 – 2,200,000',specs:'128GB · 6GB RAM',waMsg:'iPhone 14 Plus Apple Brand New - UGX 1,700,000 – 2,200,000'},
-{id:2044,name:'iPhone 14 Pro',brand:'Apple',cond:'Brand New',price:2200000,priceRange:'UGX 2,200,000 – 3,000,000',specs:'128GB · 6GB RAM',waMsg:'iPhone 14 Pro Apple Brand New - UGX 2,200,000 – 3,000,000'},
-{id:2046,name:'iPhone 14 Pro Max',brand:'Apple',cond:'Brand New',price:2500000,priceRange:'UGX 2,500,000 – 3,300,000',specs:'128GB · 6GB RAM',waMsg:'iPhone 14 Pro Max Apple Brand New - UGX 2,500,000 – 3,300,000'},
-{id:2048,name:'iPhone 15',brand:'Apple',cond:'Brand New',price:1800000,priceRange:'UGX 1,800,000 – 2,300,000',specs:'128GB · 6GB RAM',waMsg:'iPhone 15 Apple Brand New - UGX 1,800,000 – 2,300,000'},
-{id:2050,name:'iPhone 15 Plus',brand:'Apple',cond:'Brand New',price:2000000,priceRange:'UGX 2,000,000 – 2,500,000',specs:'128GB · 6GB RAM',waMsg:'iPhone 15 Plus Apple Brand New - UGX 2,000,000 – 2,500,000'},
-{id:2052,name:'iPhone 15 Pro',brand:'Apple',cond:'Brand New',price:2600000,priceRange:'UGX 2,600,000 – 3,400,000',specs:'128GB · 8GB RAM',waMsg:'iPhone 15 Pro Apple Brand New - UGX 2,600,000 – 3,400,000'},
-{id:2054,name:'iPhone 15 Pro Max',brand:'Apple',cond:'Brand New',price:3200000,priceRange:'UGX 3,200,000 – 3,800,000',specs:'256GB · 8GB RAM',waMsg:'iPhone 15 Pro Max Apple Brand New - UGX 3,200,000 – 3,800,000'},
-{id:2056,name:'iPhone 16',brand:'Apple',cond:'Brand New',price:2100000,priceRange:'UGX 2,100,000 – 2,600,000',specs:'128GB · 8GB RAM',waMsg:'iPhone 16 Apple Brand New - UGX 2,100,000 – 2,600,000'},
-{id:2058,name:'iPhone 16 Plus',brand:'Apple',cond:'Brand New',price:2300000,priceRange:'UGX 2,300,000 – 2,800,000',specs:'128GB · 8GB RAM',waMsg:'iPhone 16 Plus Apple Brand New - UGX 2,300,000 – 2,800,000'},
-{id:2060,name:'iPhone 16 Pro',brand:'Apple',cond:'Brand New',price:2800000,priceRange:'UGX 2,800,000 – 3,600,000',specs:'128GB · 8GB RAM',waMsg:'iPhone 16 Pro Apple Brand New - UGX 2,800,000 – 3,600,000'},
-{id:2062,name:'iPhone 16 Pro Max',brand:'Apple',cond:'Brand New',price:3500000,priceRange:'UGX 3,500,000 – 4,100,000',specs:'256GB · 8GB RAM',waMsg:'iPhone 16 Pro Max Apple Brand New - UGX 3,500,000 – 4,100,000'},
-{id:2064,name:'iPhone 17',brand:'Apple',cond:'Brand New',price:2600000,priceRange:'UGX 2,600,000 – 3,000,000',specs:'256GB · 8GB RAM',waMsg:'iPhone 17 Apple Brand New - UGX 2,600,000 – 3,000,000'},
-{id:2066,name:'iPhone 17 Air',brand:'Apple',cond:'Brand New',price:2900000,priceRange:'UGX 2,900,000 – 3,300,000',specs:'256GB · 8GB RAM',waMsg:'iPhone 17 Air Apple Brand New - UGX 2,900,000 – 3,300,000'},
-{id:2068,name:'iPhone 17 Pro',brand:'Apple',cond:'Brand New',price:3400000,priceRange:'UGX 3,400,000 – 4,200,000',specs:'256GB · 12GB RAM',waMsg:'iPhone 17 Pro Apple Brand New - UGX 3,400,000 – 4,200,000'},
-{id:2070,name:'iPhone 17 Pro Max',brand:'Apple',cond:'Brand New',price:3800000,priceRange:'UGX 3,800,000 – 4,700,000',specs:'256GB · 12GB RAM',waMsg:'iPhone 17 Pro Max Apple Brand New - UGX 3,800,000 – 4,700,000'},
-{id:3002,name:'Pixel 6',brand:'Google Pixel',cond:'Brand New',price:1800000,priceRange:'UGX 1,800,000 – 2,200,000',specs:'128GB',waMsg:'Pixel 6 Google Pixel Brand New - UGX 1,800,000 – 2,200,000'},
-{id:3004,name:'Pixel 6 Pro',brand:'Google Pixel',cond:'Brand New',price:2800000,priceRange:'UGX 2,800,000 – 3,200,000',specs:'128GB',waMsg:'Pixel 6 Pro Google Pixel Brand New - UGX 2,800,000 – 3,200,000'},
-{id:3006,name:'Pixel 6a',brand:'Google Pixel',cond:'Brand New',price:1500000,priceRange:'UGX 1,500,000',specs:'128GB',waMsg:'Pixel 6a Google Pixel Brand New - UGX 1,500,000'},
-{id:3008,name:'Pixel 7',brand:'Google Pixel',cond:'Brand New',price:2300000,priceRange:'UGX 2,300,000 – 2,700,000',specs:'128GB',waMsg:'Pixel 7 Google Pixel Brand New - UGX 2,300,000 – 2,700,000'},
-{id:3010,name:'Pixel 7 Pro',brand:'Google Pixel',cond:'Brand New',price:3000000,priceRange:'UGX 3,000,000 – 3,500,000',specs:'128GB',waMsg:'Pixel 7 Pro Google Pixel Brand New - UGX 3,000,000 – 3,500,000'},
-{id:3012,name:'Pixel 7a',brand:'Google Pixel',cond:'Brand New',price:1900000,priceRange:'UGX 1,900,000',specs:'128GB',waMsg:'Pixel 7a Google Pixel Brand New - UGX 1,900,000'},
-{id:3014,name:'Pixel 8',brand:'Google Pixel',cond:'Brand New',price:2800000,priceRange:'UGX 2,800,000 – 3,300,000',specs:'128GB',waMsg:'Pixel 8 Google Pixel Brand New - UGX 2,800,000 – 3,300,000'},
-{id:3016,name:'Pixel 8 Pro',brand:'Google Pixel',cond:'Brand New',price:3800000,priceRange:'UGX 3,800,000 – 4,300,000',specs:'128GB',waMsg:'Pixel 8 Pro Google Pixel Brand New - UGX 3,800,000 – 4,300,000'},
-{id:3018,name:'Pixel 8a',brand:'Google Pixel',cond:'Brand New',price:2300000,priceRange:'UGX 2,300,000',specs:'128GB',waMsg:'Pixel 8a Google Pixel Brand New - UGX 2,300,000'},
-{id:3020,name:'Pixel 9',brand:'Google Pixel',cond:'Brand New',price:3800000,priceRange:'UGX 3,800,000 – 4,300,000',specs:'128GB',waMsg:'Pixel 9 Google Pixel Brand New - UGX 3,800,000 – 4,300,000'},
-{id:3022,name:'Pixel 9 Pro',brand:'Google Pixel',cond:'Brand New',price:5000000,priceRange:'UGX 5,000,000 – 5,500,000',specs:'128GB',waMsg:'Pixel 9 Pro Google Pixel Brand New - UGX 5,000,000 – 5,500,000'},
-{id:3024,name:'Pixel 9 Pro XL',brand:'Google Pixel',cond:'Brand New',price:4500000,priceRange:'UGX 4,500,000 – 5,800,000',specs:'128GB',waMsg:'Pixel 9 Pro XL Google Pixel Brand New - UGX 4,500,000 – 5,800,000'},
-{id:3026,name:'Pixel 9 Pro Fold',brand:'Google Pixel',cond:'Brand New',price:8000000,priceRange:'UGX 8,000,000',specs:'256GB',waMsg:'Pixel 9 Pro Fold Google Pixel Brand New - UGX 8,000,000'},
-{id:3028,name:'Pixel 5',brand:'Google Pixel',cond:'Brand New',price:1500000,priceRange:'UGX 1,500,000',specs:'128GB',waMsg:'Pixel 5 Google Pixel Brand New - UGX 1,500,000'},
-{id:3030,name:'Pixel 5a',brand:'Google Pixel',cond:'Brand New',price:1700000,priceRange:'UGX 1,700,000',specs:'128GB',waMsg:'Pixel 5a Google Pixel Brand New - UGX 1,700,000'},
-{id:3032,name:'Pixel 4a',brand:'Google Pixel',cond:'Brand New',price:1200000,priceRange:'UGX 1,200,000',specs:'128GB',waMsg:'Pixel 4a Google Pixel Brand New - UGX 1,200,000'},
-{id:3034,name:'Pixel 4 XL',brand:'Google Pixel',cond:'Brand New',price:1500000,priceRange:'UGX 1,500,000',specs:'64GB/128GB',waMsg:'Pixel 4 XL Google Pixel Brand New - UGX 1,500,000'},
-{id:3036,name:'Pixel 3 XL',brand:'Google Pixel',cond:'Brand New',price:1000000,priceRange:'UGX 1,000,000',specs:'64GB/128GB',waMsg:'Pixel 3 XL Google Pixel Brand New - UGX 1,000,000'},
-{id:3302,name:'Find X5',brand:'Oppo',cond:'Brand New',price:4000000,priceRange:'UGX 4,000,000',specs:'256GB · 8GB RAM',waMsg:'Find X5 Oppo Brand New - UGX 4,000,000'},
-{id:3304,name:'Find X6',brand:'Oppo',cond:'Brand New',price:5000000,priceRange:'UGX 5,000,000',specs:'256GB · 12GB RAM',waMsg:'Find X6 Oppo Brand New - UGX 5,000,000'},
-{id:3306,name:'Find X7 Ultra',brand:'Oppo',cond:'Brand New',price:8000000,priceRange:'UGX 8,000,000',specs:'512GB · 16GB RAM',waMsg:'Find X7 Ultra Oppo Brand New - UGX 8,000,000'},
-{id:3308,name:'Reno 8',brand:'Oppo',cond:'Brand New',price:3000000,priceRange:'UGX 3,000,000',specs:'256GB · 8GB RAM',waMsg:'Reno 8 Oppo Brand New - UGX 3,000,000'},
-{id:3310,name:'Reno 10',brand:'Oppo',cond:'Brand New',price:3800000,priceRange:'UGX 3,800,000',specs:'256GB · 8GB RAM',waMsg:'Reno 10 Oppo Brand New - UGX 3,800,000'},
-{id:3312,name:'Reno 12',brand:'Oppo',cond:'Brand New',price:4500000,priceRange:'UGX 4,500,000',specs:'256GB · 12GB RAM',waMsg:'Reno 12 Oppo Brand New - UGX 4,500,000'},
-{id:3314,name:'Oppo A17',brand:'Oppo',cond:'Brand New',price:750000,priceRange:'UGX 750,000',specs:'64GB · 4GB RAM',waMsg:'Oppo A17 Oppo Brand New - UGX 750,000'},
-{id:3316,name:'Oppo A54',brand:'Oppo',cond:'Brand New',price:900000,priceRange:'UGX 900,000',specs:'128GB · 4GB RAM',waMsg:'Oppo A54 Oppo Brand New - UGX 900,000'},
-{id:3318,name:'Oppo A78',brand:'Oppo',cond:'Brand New',price:1400000,priceRange:'UGX 1,400,000',specs:'128GB · 8GB RAM',waMsg:'Oppo A78 Oppo Brand New - UGX 1,400,000'},
-{id:3320,name:'Oppo A98',brand:'Oppo',cond:'Brand New',price:2200000,priceRange:'UGX 2,200,000',specs:'256GB · 8GB RAM',waMsg:'Oppo A98 Oppo Brand New - UGX 2,200,000'},
-{id:3322,name:'Oppo F21 Pro',brand:'Oppo',cond:'Brand New',price:1800000,priceRange:'UGX 1,800,000',specs:'128GB · 8GB RAM',waMsg:'Oppo F21 Pro Oppo Brand New - UGX 1,800,000'},
-{id:3324,name:'Oppo F23',brand:'Oppo',cond:'Brand New',price:2300000,priceRange:'UGX 2,300,000',specs:'256GB · 8GB RAM',waMsg:'Oppo F23 Oppo Brand New - UGX 2,300,000'},
-{id:3602,name:'Redmi Note 12',brand:'Redmi',cond:'Brand New',price:1500000,priceRange:'UGX 1,500,000',specs:'128GB · 6GB RAM',waMsg:'Redmi Note 12 Redmi Brand New - UGX 1,500,000'},
-{id:3604,name:'Redmi Note 13 Pro',brand:'Redmi',cond:'Brand New',price:2500000,priceRange:'UGX 2,500,000',specs:'256GB · 8GB RAM',waMsg:'Redmi Note 13 Pro Redmi Brand New - UGX 2,500,000'},
-{id:3606,name:'Redmi Note 14 Pro+',brand:'Redmi',cond:'Brand New',price:4000000,priceRange:'UGX 4,000,000',specs:'512GB · 12GB RAM',waMsg:'Redmi Note 14 Pro+ Redmi Brand New - UGX 4,000,000'},
-{id:3608,name:'Redmi 12',brand:'Redmi',cond:'Brand New',price:1000000,priceRange:'UGX 1,000,000',specs:'128GB · 8GB RAM',waMsg:'Redmi 12 Redmi Brand New - UGX 1,000,000'},
-{id:3610,name:'Redmi 13',brand:'Redmi',cond:'Brand New',price:1500000,priceRange:'UGX 1,500,000',specs:'256GB · 8GB RAM',waMsg:'Redmi 13 Redmi Brand New - UGX 1,500,000'},
-{id:3612,name:'Redmi A3',brand:'Redmi',cond:'Brand New',price:550000,priceRange:'UGX 550,000',specs:'64GB · 3GB RAM',waMsg:'Redmi A3 Redmi Brand New - UGX 550,000'},
-{id:3902,name:'Xiaomi 13',brand:'Xiaomi',cond:'Brand New',price:4500000,priceRange:'UGX 4,500,000',specs:'256GB · 8GB RAM',waMsg:'Xiaomi 13 Xiaomi Brand New - UGX 4,500,000'},
-{id:3904,name:'Xiaomi 14',brand:'Xiaomi',cond:'Brand New',price:5500000,priceRange:'UGX 5,500,000',specs:'256GB · 12GB RAM',waMsg:'Xiaomi 14 Xiaomi Brand New - UGX 5,500,000'},
-{id:3906,name:'Xiaomi 15 Ultra',brand:'Xiaomi',cond:'Brand New',price:9000000,priceRange:'UGX 9,000,000',specs:'512GB · 16GB RAM',waMsg:'Xiaomi 15 Ultra Xiaomi Brand New - UGX 9,000,000'},
-{id:4202,name:'Poco F5',brand:'Poco',cond:'Brand New',price:3000000,priceRange:'UGX 3,000,000',specs:'256GB · 8GB RAM',waMsg:'Poco F5 Poco Brand New - UGX 3,000,000'},
-{id:4204,name:'Poco F6 Pro',brand:'Poco',cond:'Brand New',price:5000000,priceRange:'UGX 5,000,000',specs:'512GB · 12GB RAM',waMsg:'Poco F6 Pro Poco Brand New - UGX 5,000,000'},
-{id:4206,name:'Poco X5 Pro',brand:'Poco',cond:'Brand New',price:2800000,priceRange:'UGX 2,800,000',specs:'256GB · 8GB RAM',waMsg:'Poco X5 Pro Poco Brand New - UGX 2,800,000'},
-{id:4208,name:'Poco X6 Pro',brand:'Poco',cond:'Brand New',price:3800000,priceRange:'UGX 3,800,000',specs:'512GB · 12GB RAM',waMsg:'Poco X6 Pro Poco Brand New - UGX 3,800,000'},
-{id:4210,name:'Poco M6 Pro',brand:'Poco',cond:'Brand New',price:1800000,priceRange:'UGX 1,800,000',specs:'256GB · 8GB RAM',waMsg:'Poco M6 Pro Poco Brand New - UGX 1,800,000'},
-{id:4502,name:'Phantom 8',brand:'Tecno',cond:'Brand New',price:1800000,priceRange:'UGX 1,800,000',specs:'64GB · 6GB RAM',waMsg:'Phantom 8 Tecno Brand New - UGX 1,800,000'},
-{id:4504,name:'Phantom 9',brand:'Tecno',cond:'Brand New',price:1700000,priceRange:'UGX 1,700,000',specs:'128GB · 6GB RAM',waMsg:'Phantom 9 Tecno Brand New - UGX 1,700,000'},
-{id:4506,name:'Phantom X',brand:'Tecno',cond:'Brand New',price:2300000,priceRange:'UGX 2,300,000',specs:'256GB · 8GB RAM',waMsg:'Phantom X Tecno Brand New - UGX 2,300,000'},
-{id:4508,name:'Phantom X2',brand:'Tecno',cond:'Brand New',price:3200000,priceRange:'UGX 3,200,000',specs:'256GB · 8GB RAM',waMsg:'Phantom X2 Tecno Brand New - UGX 3,200,000'},
-{id:4510,name:'Phantom X2 Pro',brand:'Tecno',cond:'Brand New',price:4000000,priceRange:'UGX 4,000,000',specs:'256GB · 12GB RAM',waMsg:'Phantom X2 Pro Tecno Brand New - UGX 4,000,000'},
-{id:4512,name:'Phantom V Fold',brand:'Tecno',cond:'Brand New',price:6000000,priceRange:'UGX 6,000,000',specs:'256GB · 12GB RAM',waMsg:'Phantom V Fold Tecno Brand New - UGX 6,000,000'},
-{id:4514,name:'Phantom V Flip',brand:'Tecno',cond:'Brand New',price:4000000,priceRange:'UGX 4,000,000',specs:'256GB · 8GB RAM',waMsg:'Phantom V Flip Tecno Brand New - UGX 4,000,000'},
-{id:4516,name:'Camon 15',brand:'Tecno',cond:'Brand New',price:800000,priceRange:'UGX 800,000',specs:'64GB · 4GB RAM',waMsg:'Camon 15 Tecno Brand New - UGX 800,000'},
-{id:4518,name:'Camon 17',brand:'Tecno',cond:'Brand New',price:1100000,priceRange:'UGX 1,100,000',specs:'128GB · 6GB RAM',waMsg:'Camon 17 Tecno Brand New - UGX 1,100,000'},
-{id:4520,name:'Camon 19',brand:'Tecno',cond:'Brand New',price:1500000,priceRange:'UGX 1,500,000',specs:'128GB · 6GB RAM',waMsg:'Camon 19 Tecno Brand New - UGX 1,500,000'},
-{id:4522,name:'Camon 19 Pro',brand:'Tecno',cond:'Brand New',price:1800000,priceRange:'UGX 1,800,000',specs:'128GB · 8GB RAM',waMsg:'Camon 19 Pro Tecno Brand New - UGX 1,800,000'},
-{id:4524,name:'Camon 20',brand:'Tecno',cond:'Brand New',price:2000000,priceRange:'UGX 2,000,000',specs:'256GB · 8GB RAM',waMsg:'Camon 20 Tecno Brand New - UGX 2,000,000'},
-{id:4526,name:'Camon 20 Pro',brand:'Tecno',cond:'Brand New',price:2300000,priceRange:'UGX 2,300,000',specs:'256GB · 8GB RAM',waMsg:'Camon 20 Pro Tecno Brand New - UGX 2,300,000'},
-{id:4528,name:'Camon 30',brand:'Tecno',cond:'Brand New',price:2500000,priceRange:'UGX 2,500,000',specs:'256GB · 8GB RAM',waMsg:'Camon 30 Tecno Brand New - UGX 2,500,000'},
-{id:4530,name:'Camon 30 Pro',brand:'Tecno',cond:'Brand New',price:3800000,priceRange:'UGX 3,800,000',specs:'512GB · 12GB RAM',waMsg:'Camon 30 Pro Tecno Brand New - UGX 3,800,000'},
-{id:4532,name:'Camon 40',brand:'Tecno',cond:'Brand New',price:2800000,priceRange:'UGX 2,800,000',specs:'256GB · 8GB RAM',waMsg:'Camon 40 Tecno Brand New - UGX 2,800,000'},
-{id:4534,name:'Pova',brand:'Tecno',cond:'Brand New',price:800000,priceRange:'UGX 800,000',specs:'64GB · 4GB RAM',waMsg:'Pova Tecno Brand New - UGX 800,000'},
-{id:4536,name:'Pova 3',brand:'Tecno',cond:'Brand New',price:1300000,priceRange:'UGX 1,300,000',specs:'128GB · 6GB RAM',waMsg:'Pova 3 Tecno Brand New - UGX 1,300,000'},
-{id:4538,name:'Pova 5',brand:'Tecno',cond:'Brand New',price:1800000,priceRange:'UGX 1,800,000',specs:'128GB · 8GB RAM',waMsg:'Pova 5 Tecno Brand New - UGX 1,800,000'},
-{id:4540,name:'Pova 5 Pro',brand:'Tecno',cond:'Brand New',price:2300000,priceRange:'UGX 2,300,000',specs:'256GB · 8GB RAM',waMsg:'Pova 5 Pro Tecno Brand New - UGX 2,300,000'},
-{id:4542,name:'Pova 6',brand:'Tecno',cond:'Brand New',price:2200000,priceRange:'UGX 2,200,000',specs:'256GB · 8GB RAM',waMsg:'Pova 6 Tecno Brand New - UGX 2,200,000'},
-{id:4544,name:'Pova 6 Pro',brand:'Tecno',cond:'Brand New',price:3000000,priceRange:'UGX 3,000,000',specs:'256GB · 12GB RAM',waMsg:'Pova 6 Pro Tecno Brand New - UGX 3,000,000'},
-{id:4546,name:'Spark 5',brand:'Tecno',cond:'Brand New',price:450000,priceRange:'UGX 450,000',specs:'32GB · 2GB RAM',waMsg:'Spark 5 Tecno Brand New - UGX 450,000'},
-{id:4548,name:'Spark 8',brand:'Tecno',cond:'Brand New',price:750000,priceRange:'UGX 750,000',specs:'64GB · 2GB RAM',waMsg:'Spark 8 Tecno Brand New - UGX 750,000'},
-{id:4550,name:'Spark 10',brand:'Tecno',cond:'Brand New',price:1000000,priceRange:'UGX 1,000,000',specs:'128GB · 4GB RAM',waMsg:'Spark 10 Tecno Brand New - UGX 1,000,000'},
-{id:4552,name:'Spark 10 Pro',brand:'Tecno',cond:'Brand New',price:1300000,priceRange:'UGX 1,300,000',specs:'128GB · 8GB RAM',waMsg:'Spark 10 Pro Tecno Brand New - UGX 1,300,000'},
-{id:4554,name:'Spark 20',brand:'Tecno',cond:'Brand New',price:1100000,priceRange:'UGX 1,100,000',specs:'128GB · 4GB RAM',waMsg:'Spark 20 Tecno Brand New - UGX 1,100,000'},
-{id:4556,name:'Spark 20 Pro',brand:'Tecno',cond:'Brand New',price:1700000,priceRange:'UGX 1,700,000',specs:'256GB · 8GB RAM',waMsg:'Spark 20 Pro Tecno Brand New - UGX 1,700,000'},
-{id:4558,name:'Spark 30',brand:'Tecno',cond:'Brand New',price:1400000,priceRange:'UGX 1,400,000',specs:'128GB · 8GB RAM',waMsg:'Spark 30 Tecno Brand New - UGX 1,400,000'},
-{id:4560,name:'Spark 40',brand:'Tecno',cond:'Brand New',price:1600000,priceRange:'UGX 1,600,000',specs:'128GB · 8GB RAM',waMsg:'Spark 40 Tecno Brand New - UGX 1,600,000'},
-{id:4562,name:'Pop 5',brand:'Tecno',cond:'Brand New',price:350000,priceRange:'UGX 350,000',specs:'32GB · 2GB RAM',waMsg:'Pop 5 Tecno Brand New - UGX 350,000'},
-{id:4564,name:'Pop 8',brand:'Tecno',cond:'Brand New',price:600000,priceRange:'UGX 600,000',specs:'64GB · 3GB RAM',waMsg:'Pop 8 Tecno Brand New - UGX 600,000'},
-{id:4566,name:'Pop 10',brand:'Tecno',cond:'Brand New',price:850000,priceRange:'UGX 850,000',specs:'128GB · 4GB RAM',waMsg:'Pop 10 Tecno Brand New - UGX 850,000'},
-{id:4802,name:'Zero 8',brand:'Infinix',cond:'Brand New',price:1400000,priceRange:'UGX 1,400,000',specs:'128GB · 8GB RAM',waMsg:'Zero 8 Infinix Brand New - UGX 1,400,000'},
-{id:4804,name:'Zero X Pro',brand:'Infinix',cond:'Brand New',price:2200000,priceRange:'UGX 2,200,000',specs:'128GB · 8GB RAM',waMsg:'Zero X Pro Infinix Brand New - UGX 2,200,000'},
-{id:4806,name:'Zero Ultra',brand:'Infinix',cond:'Brand New',price:3000000,priceRange:'UGX 3,000,000',specs:'256GB · 8GB RAM',waMsg:'Zero Ultra Infinix Brand New - UGX 3,000,000'},
-{id:4808,name:'Zero 30 5G',brand:'Infinix',cond:'Brand New',price:2800000,priceRange:'UGX 2,800,000',specs:'256GB · 12GB RAM',waMsg:'Zero 30 5G Infinix Brand New - UGX 2,800,000'},
-{id:4810,name:'Zero 40',brand:'Infinix',cond:'Brand New',price:3000000,priceRange:'UGX 3,000,000',specs:'256GB · 12GB RAM',waMsg:'Zero 40 Infinix Brand New - UGX 3,000,000'},
-{id:4812,name:'Zero Flip',brand:'Infinix',cond:'Brand New',price:5000000,priceRange:'UGX 5,000,000',specs:'512GB · 16GB RAM',waMsg:'Zero Flip Infinix Brand New - UGX 5,000,000'},
-{id:4814,name:'Note 7',brand:'Infinix',cond:'Brand New',price:800000,priceRange:'UGX 800,000',specs:'64GB · 4GB RAM',waMsg:'Note 7 Infinix Brand New - UGX 800,000'},
-{id:4816,name:'Note 11',brand:'Infinix',cond:'Brand New',price:1100000,priceRange:'UGX 1,100,000',specs:'128GB · 4GB RAM',waMsg:'Note 11 Infinix Brand New - UGX 1,100,000'},
-{id:4818,name:'Note 12',brand:'Infinix',cond:'Brand New',price:1300000,priceRange:'UGX 1,300,000',specs:'128GB · 6GB RAM',waMsg:'Note 12 Infinix Brand New - UGX 1,300,000'},
-{id:4820,name:'Note 12 Pro',brand:'Infinix',cond:'Brand New',price:1700000,priceRange:'UGX 1,700,000',specs:'128GB · 8GB RAM',waMsg:'Note 12 Pro Infinix Brand New - UGX 1,700,000'},
-{id:4822,name:'Note 30',brand:'Infinix',cond:'Brand New',price:1500000,priceRange:'UGX 1,500,000',specs:'128GB · 8GB RAM',waMsg:'Note 30 Infinix Brand New - UGX 1,500,000'},
-{id:4824,name:'Note 30 Pro',brand:'Infinix',cond:'Brand New',price:2000000,priceRange:'UGX 2,000,000',specs:'256GB · 8GB RAM',waMsg:'Note 30 Pro Infinix Brand New - UGX 2,000,000'},
-{id:4826,name:'Note 40',brand:'Infinix',cond:'Brand New',price:2000000,priceRange:'UGX 2,000,000',specs:'256GB · 8GB RAM',waMsg:'Note 40 Infinix Brand New - UGX 2,000,000'},
-{id:4828,name:'Note 40 Pro',brand:'Infinix',cond:'Brand New',price:2800000,priceRange:'UGX 2,800,000',specs:'256GB · 12GB RAM',waMsg:'Note 40 Pro Infinix Brand New - UGX 2,800,000'},
-{id:4830,name:'Note 50',brand:'Infinix',cond:'Brand New',price:2500000,priceRange:'UGX 2,500,000',specs:'256GB · 8GB RAM',waMsg:'Note 50 Infinix Brand New - UGX 2,500,000'},
-{id:4832,name:'Note 50 Pro',brand:'Infinix',cond:'Brand New',price:3200000,priceRange:'UGX 3,200,000',specs:'256GB · 12GB RAM',waMsg:'Note 50 Pro Infinix Brand New - UGX 3,200,000'},
-{id:4834,name:'Hot 10',brand:'Infinix',cond:'Brand New',price:650000,priceRange:'UGX 650,000',specs:'64GB · 3GB RAM',waMsg:'Hot 10 Infinix Brand New - UGX 650,000'},
-{id:4836,name:'Hot 12',brand:'Infinix',cond:'Brand New',price:900000,priceRange:'UGX 900,000',specs:'128GB · 6GB RAM',waMsg:'Hot 12 Infinix Brand New - UGX 900,000'},
-{id:4838,name:'Hot 20',brand:'Infinix',cond:'Brand New',price:900000,priceRange:'UGX 900,000',specs:'64GB · 4GB RAM',waMsg:'Hot 20 Infinix Brand New - UGX 900,000'},
-{id:4840,name:'Hot 30',brand:'Infinix',cond:'Brand New',price:1200000,priceRange:'UGX 1,200,000',specs:'128GB · 8GB RAM',waMsg:'Hot 30 Infinix Brand New - UGX 1,200,000'},
-{id:4842,name:'Hot 40',brand:'Infinix',cond:'Brand New',price:1300000,priceRange:'UGX 1,300,000',specs:'128GB · 8GB RAM',waMsg:'Hot 40 Infinix Brand New - UGX 1,300,000'},
-{id:4844,name:'Hot 50',brand:'Infinix',cond:'Brand New',price:1500000,priceRange:'UGX 1,500,000',specs:'128GB · 8GB RAM',waMsg:'Hot 50 Infinix Brand New - UGX 1,500,000'},
-{id:4846,name:'Hot 50 Pro',brand:'Infinix',cond:'Brand New',price:2000000,priceRange:'UGX 2,000,000',specs:'256GB · 8GB RAM',waMsg:'Hot 50 Pro Infinix Brand New - UGX 2,000,000'},
-{id:4848,name:'Smart 5',brand:'Infinix',cond:'Brand New',price:350000,priceRange:'UGX 350,000',specs:'32GB · 2GB RAM',waMsg:'Smart 5 Infinix Brand New - UGX 350,000'},
-{id:4850,name:'Smart 7',brand:'Infinix',cond:'Brand New',price:500000,priceRange:'UGX 500,000',specs:'64GB · 3GB RAM',waMsg:'Smart 7 Infinix Brand New - UGX 500,000'},
-{id:4852,name:'Smart 8',brand:'Infinix',cond:'Brand New',price:650000,priceRange:'UGX 650,000',specs:'64GB · 4GB RAM',waMsg:'Smart 8 Infinix Brand New - UGX 650,000'},
-{id:4854,name:'Smart 9',brand:'Infinix',cond:'Brand New',price:750000,priceRange:'UGX 750,000',specs:'128GB · 4GB RAM',waMsg:'Smart 9 Infinix Brand New - UGX 750,000'},
-{id:5102,name:'itel P40',brand:'itel',cond:'Brand New',price:450000,priceRange:'UGX 450,000',specs:'32GB · 2GB RAM',waMsg:'itel P40 itel Brand New - UGX 450,000'},
-{id:5104,name:'itel P55',brand:'itel',cond:'Brand New',price:650000,priceRange:'UGX 650,000',specs:'64GB · 4GB RAM',waMsg:'itel P55 itel Brand New - UGX 650,000'},
-{id:5106,name:'itel P65',brand:'itel',cond:'Brand New',price:750000,priceRange:'UGX 750,000',specs:'128GB · 4GB RAM',waMsg:'itel P65 itel Brand New - UGX 750,000'},
-{id:5108,name:'itel A60',brand:'itel',cond:'Brand New',price:400000,priceRange:'UGX 400,000',specs:'32GB · 2GB RAM',waMsg:'itel A60 itel Brand New - UGX 400,000'},
-{id:5110,name:'itel A70',brand:'itel',cond:'Brand New',price:550000,priceRange:'UGX 550,000',specs:'128GB · 4GB RAM',waMsg:'itel A70 itel Brand New - UGX 550,000'},
-{id:5112,name:'itel A90',brand:'itel',cond:'Brand New',price:700000,priceRange:'UGX 700,000',specs:'128GB · 4GB RAM',waMsg:'itel A90 itel Brand New - UGX 700,000'},
-{id:5114,name:'itel S23',brand:'itel',cond:'Brand New',price:700000,priceRange:'UGX 700,000',specs:'128GB · 4GB RAM',waMsg:'itel S23 itel Brand New - UGX 700,000'},
-{id:5116,name:'itel S24',brand:'itel',cond:'Brand New',price:850000,priceRange:'UGX 850,000',specs:'128GB · 4GB RAM',waMsg:'itel S24 itel Brand New - UGX 850,000'},
-{id:5118,name:'Vision 5',brand:'itel',cond:'Brand New',price:700000,priceRange:'UGX 700,000',specs:'128GB · 4GB RAM',waMsg:'Vision 5 itel Brand New - UGX 700,000'},
-{id:5402,name:'Nokia G22',brand:'Nokia',cond:'Brand New',price:900000,priceRange:'UGX 900,000',specs:'128GB · 4GB RAM',waMsg:'Nokia G22 Nokia Brand New - UGX 900,000'},
-{id:5404,name:'Nokia G60 5G',brand:'Nokia',cond:'Brand New',price:1700000,priceRange:'UGX 1,700,000',specs:'128GB · 6GB RAM',waMsg:'Nokia G60 5G Nokia Brand New - UGX 1,700,000'},
-{id:5406,name:'Nokia X30 5G',brand:'Nokia',cond:'Brand New',price:2000000,priceRange:'UGX 2,000,000',specs:'256GB · 8GB RAM',waMsg:'Nokia X30 5G Nokia Brand New - UGX 2,000,000'},
-{id:5408,name:'Nokia C32',brand:'Nokia',cond:'Brand New',price:650000,priceRange:'UGX 650,000',specs:'128GB · 4GB RAM',waMsg:'Nokia C32 Nokia Brand New - UGX 650,000'}
-];
+<script type="module">
+import { fetchProducts } from './assets/js/supabase.js';
+import { renderProductGrid } from './assets/js/products.js';
 
 const grid = document.getElementById('productsGrid');
 const countEl = document.getElementById('resultsCount');
 const cntAll = document.getElementById('cnt-all');
-cntAll.textContent = PRODUCTS.length;
 
-let seriesFilter = 'all';
+let ALL_PRODUCTS = [];
+let brandFilter = 'all';
 let sortMode = 'default';
 
-function fmtUGX(n){ return 'UGX ' + n.toLocaleString('en-US'); }
-
-function render(){
-  let list = PRODUCTS.filter(p => (seriesFilter==='all'||p.brand===seriesFilter));
-  if(sortMode==='low') list = list.slice().sort((a,b)=>a.price-b.price);
-  if(sortMode==='high') list = list.slice().sort((a,b)=>b.price-a.price);
+function applyFiltersAndRender(){
+  let list = ALL_PRODUCTS.filter(p => brandFilter === 'all' || p.brand === brandFilter);
+  if (sortMode === 'low')  list = list.slice().sort((a, b) => a.price - b.price);
+  if (sortMode === 'high') list = list.slice().sort((a, b) => b.price - a.price);
   countEl.textContent = list.length + ' phones found';
-  grid.innerHTML = list.map(p => `
-    <div class="prod-card">
-      <span class="prod-card-badge badge-new">Brand New</span>
-      <div class="prod-img-wrap"><span class="prod-img-placeholder">✨</span></div>
-      <div class="prod-body">
-        <div class="prod-series">${p.brand}</div>
-        <div class="prod-name">${p.name}</div>
-        <div class="prod-specs">${p.specs}</div>
-        <div class="prod-price">${p.priceRange}</div>
-        <a class="prod-btn-wa" target="_blank" href="https://wa.me/256756922058?text=${encodeURIComponent('Hello, I want to buy: ' + p.waMsg)}">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          Ask on WhatsApp
-        </a>
-      </div>
-    </div>
-  `).join('');
+  renderProductGrid(grid, list);
 }
 
-document.getElementById('seriesSelect').addEventListener('change', e=>{ seriesFilter = e.target.value; render(); });
-document.getElementById('sortSelect').addEventListener('change', e=>{ sortMode = e.target.value; render(); });
+async function init(){
+  grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text3);">Loading brand new phones…</div>';
+  ALL_PRODUCTS = await fetchProducts({ condition: 'Brand New' });
+  cntAll.textContent = ALL_PRODUCTS.length;
+  applyFiltersAndRender();
+}
 
-render();
+document.getElementById('brandSelect').addEventListener('change', e => { brandFilter = e.target.value; applyFiltersAndRender(); });
+document.getElementById('sortSelect').addEventListener('change', e => { sortMode = e.target.value; applyFiltersAndRender(); });
+
+init();
 </script>
 </body>
 </html>
