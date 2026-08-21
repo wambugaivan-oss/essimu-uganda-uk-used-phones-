@@ -148,6 +148,18 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 5%;background:rgb
 .cat-icon{font-size:2rem;margin-bottom:10px;display:block;position:relative;}
 .cat-logo-wrap{width:44px;height:44px;margin:0 auto 10px;background:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;position:relative;padding:6px;box-sizing:border-box;}
 .cat-logo-wrap img{width:100%;height:100%;object-fit:contain;}
+.promo-strip{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.promo-card{display:block;border-radius:var(--radius);padding:26px 28px;position:relative;overflow:hidden;transition:transform .25s,box-shadow .25s;border:1px solid var(--border);}
+.promo-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
+.promo-deals{background:linear-gradient(135deg,#3a1414,#1a0d0d);}
+.promo-wholesale{background:linear-gradient(135deg,#0f1e33,#0d1420);}
+[data-theme="light"] .promo-deals{background:linear-gradient(135deg,#fff1f0,#ffe4e0);}
+[data-theme="light"] .promo-wholesale{background:linear-gradient(135deg,#eff6ff,#dbeafe);}
+.promo-eyebrow{font-size:.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-bottom:10px;}
+.promo-title{font-family:var(--font-display);font-size:1.4rem;font-weight:800;margin-bottom:8px;letter-spacing:-.3px;}
+.promo-desc{font-size:.85rem;color:var(--text2);line-height:1.6;margin-bottom:18px;max-width:380px;}
+.promo-cta{font-size:.82rem;font-weight:700;color:var(--blue);}
+@media(max-width:768px){.promo-strip{grid-template-columns:1fr;}}
 .cat-name{font-family:var(--font-display);font-size:.78rem;font-weight:700;color:var(--text);position:relative;}
 .cat-count{font-size:.68rem;color:var(--text3);margin-top:3px;position:relative;}
 .filter-bar{display:flex;gap:10px;align-items:center;margin-bottom:28px;flex-wrap:wrap;}
@@ -383,6 +395,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:60px 6% 
   <a href="hot-deals.html" style="color:var(--red,#ef4444);">🔥 Hot Deals</a>
   <a href="#categories" onclick="closeMobileNav()">Categories</a>
   <a href="#products" onclick="closeMobileNav()">All Phones</a>
+  <a href="wholesale.html">Wholesale</a>
   <a href="repair.html">Repairs</a>
   <a href="blog.html">Blog</a>
   <a href="#services" onclick="closeMobileNav()">Services</a>
@@ -460,8 +473,25 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:60px 6% 
     <a href="pixel.html" class="cat-card"><div class="cat-logo-wrap"><img src="https://cdn.simpleicons.org/googlepixel/000000" alt="Google Pixel logo" loading="lazy" onerror="this.src='https://cdn.simpleicons.org/google/000000';this.onerror=function(){this.parentElement.outerHTML='&lt;span class=&quot;cat-icon&quot;&gt;🔵&lt;/span&gt;'}"></div><div class="cat-name">Google Pixel</div><div class="cat-count" id="cnt-pixel"></div></a>
     <a href="oppo.html" class="cat-card"><div class="cat-logo-wrap"><img src="https://cdn.simpleicons.org/oppo/000000" alt="Oppo logo" loading="lazy" onerror="this.parentElement.outerHTML='&lt;span class=&quot;cat-icon&quot;&gt;🟢&lt;/span&gt;'"></div><div class="cat-name">Oppo</div><div class="cat-count" id="cnt-oppo"></div></a>
     <a href="redmi.html" class="cat-card"><div class="cat-logo-wrap"><img src="https://cdn.simpleicons.org/xiaomi/000000" alt="Redmi Xiaomi logo" loading="lazy" onerror="this.parentElement.outerHTML='&lt;span class=&quot;cat-icon&quot;&gt;🟠&lt;/span&gt;'"></div><div class="cat-name">Redmi</div><div class="cat-count" id="cnt-redmi"></div></a>
-    <a href="tecno.html" class="cat-card"><span class="cat-icon">🟡</span><div class="cat-name">Tecno &amp; Others</div><div class="cat-count" id="cnt-tecno"></div></a>
+    <a href="tecno.html" class="cat-card"><div class="cat-logo-wrap"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Tecno_Mobile_logo.svg" alt="Tecno logo" loading="lazy" onerror="this.parentElement.outerHTML='<span class=&quot;cat-icon&quot;>🟡</span>'"></div><div class="cat-name">Tecno &amp; Others</div><div class="cat-count" id="cnt-tecno"></div></a>
     <a href="accessories.html" class="cat-card"><span class="cat-icon">🎧</span><div class="cat-name">Accessories</div><div class="cat-count" id="cnt-accessories"></div></a>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0" aria-label="Promotions">
+  <div class="promo-strip">
+    <a href="hot-deals.html" class="promo-card promo-deals">
+      <div class="promo-eyebrow">🔥 Limited Time</div>
+      <div class="promo-title">Hot Deals &amp; Clearance</div>
+      <div class="promo-desc">Special prices on selected phones, TVs, laptops &amp; audio — while stock lasts.</div>
+      <span class="promo-cta">Shop Hot Deals →</span>
+    </a>
+    <a href="wholesale.html" class="promo-card promo-wholesale">
+      <div class="promo-eyebrow">🏢 For Retailers &amp; Dealers</div>
+      <div class="promo-title">Wholesale &amp; Bulk Orders</div>
+      <div class="promo-desc">Buying in bulk? Get wholesale pricing on phones, TVs, laptops and accessories.</div>
+      <span class="promo-cta">View Wholesale →</span>
+    </a>
   </div>
 </section>
 
@@ -578,7 +608,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:60px 6% 
     </div>
     <div class="footer-col">
       <div class="footer-col-title">Phone Brands</div>
-      <a href="hot-deals.html">🔥 Hot Deals</a>
       <a href="samsung.html">Samsung Phones</a>
       <a href="iphone.html">iPhones</a>
       <a href="pixel.html">Google Pixel</a>
@@ -591,6 +620,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:60px 6% 
     </div>
     <div class="footer-col">
       <div class="footer-col-title">Shop &amp; Services</div>
+      <a href="hot-deals.html">🔥 Hot Deals</a>
       <a href="brand-new.html">Brand New Phones</a>
       <a href="uk-used.html">UK Used Phones</a>
       <a href="laptops.html">Laptops</a>
