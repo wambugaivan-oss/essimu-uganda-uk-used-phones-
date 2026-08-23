@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Audio & Earbuds Uganda – AirPods, Galaxy Buds, JBL, Sony | Essimu Uganda</title>
 <meta name="description" content="Buy AirPods, Galaxy Buds, JBL and Sony speakers/earbuds in Kampala Uganda – Brand New and UK Used at the best prices.">
-<meta name="keywords" content="AirPods Uganda, Galaxy Buds Uganda, JBL speaker Uganda, earbuds price Uganda, buy earphones Kampala">
+<meta name="keywords" content="AirPods Uganda, Galaxy Buds Uganda, JBL speaker Uganda, earbuds price Uganda">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://essimuuganda.site/audio.html">
 <meta property="og:type" content="website">
@@ -148,16 +148,14 @@ WhatsApp
 <button class="filter-btn active" data-cond="all">All (<span id="cnt-all">0</span>)</button>
 <button class="filter-btn" data-cond="UK Used">UK Used</button>
 <button class="filter-btn" data-cond="Brand New">Brand New</button>
-<select class="filter-select" id="seriesSelect">
-<option value="all">All Categories</option>
-<option value="Earbuds">Earbuds</option>
-<option value="ANC Earbuds">ANC Earbuds</option>
-<option value="Headphones">Headphones</option>
-<option value="Portable Speaker">Portable Speaker</option>
-<option value="Large Portable Speaker">Large Portable Speaker</option>
-<option value="Party Speaker">Party Speaker</option>
-<option value="Wireless Earbuds">Wireless Earbuds</option>
-<option value="Bluetooth Speaker">Bluetooth Speaker</option>
+<select class="filter-select" id="brandSelect">
+<option value="all">All Brands</option>
+<option value="Apple">Apple</option>
+<option value="Samsung">Samsung</option>
+<option value="JBL">JBL</option>
+<option value="Sony">Sony</option>
+<option value="Anker">Anker</option>
+<option value="Oraimo">Oraimo</option>
 </select>
 <select class="filter-select" id="sortSelect">
 <option value="default">Sort: Default</option>
@@ -165,7 +163,7 @@ WhatsApp
 <option value="high">Price: High to Low</option>
 </select>
 </div>
-<div class="results-count" id="resultsCount"></div>
+<div class="results-count" id="resultsCount">Loading…</div>
 <div class="products-grid" id="productsGrid"></div>
 
 <div class="repair-strip">
@@ -184,10 +182,10 @@ WhatsApp
 <div class="footer-col-title">Categories</div>
 <a href="samsung.html">Samsung Phones</a>
 <a href="iphone.html">iPhones</a>
-<a href="index.html#products">Google Pixel</a>
-<a href="index.html#products">Oppo</a>
-<a href="index.html#products">Redmi</a>
-<a href="index.html#products">Tecno &amp; Others</a>
+<a href="pixel.html">Google Pixel</a>
+<a href="oppo.html">Oppo</a>
+<a href="redmi.html">Redmi</a>
+<a href="tecno.html">Tecno &amp; Others</a>
 </div>
 <div class="footer-col">
 <div class="footer-col-title">Services</div>
@@ -218,98 +216,49 @@ WhatsApp
 <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 
-<script>
-// AUDIO — real data from ESSIMU Uganda Master Price List (compiled 2026-08-04)
-const PRODUCTS = [
-{id:13001,name:'Apple AirPods 2nd Gen',cond:'Brand New',price:900000,priceRange:'UGX 900,000',specs:'Earbuds',series:'Earbuds',badge:'new',waMsg:'Apple AirPods 2nd Gen Brand New - UGX 900,000'},
-{id:13002,name:'Apple AirPods 2nd Gen',cond:'UK Used',price:400000,priceRange:'UGX 400,000',specs:'Earbuds',series:'Earbuds',badge:'used',waMsg:'Apple AirPods 2nd Gen UK Used - UGX 400,000'},
-{id:13003,name:'Apple AirPods 3rd Gen',cond:'Brand New',price:1400000,priceRange:'UGX 1,400,000',specs:'Earbuds',series:'Earbuds',badge:'new',waMsg:'Apple AirPods 3rd Gen Brand New - UGX 1,400,000'},
-{id:13004,name:'Apple AirPods 3rd Gen',cond:'UK Used',price:800000,priceRange:'UGX 800,000',specs:'Earbuds',series:'Earbuds',badge:'used',waMsg:'Apple AirPods 3rd Gen UK Used - UGX 800,000'},
-{id:13005,name:'Apple AirPods 4 with ANC',cond:'Brand New',price:2000000,priceRange:'UGX 2,000,000',specs:'Earbuds',series:'Earbuds',badge:'new',waMsg:'Apple AirPods 4 with ANC Brand New - UGX 2,000,000'},
-{id:13006,name:'Apple AirPods 4 with ANC',cond:'UK Used',price:1400000,priceRange:'UGX 1,400,000',specs:'Earbuds',series:'Earbuds',badge:'used',waMsg:'Apple AirPods 4 with ANC UK Used - UGX 1,400,000'},
-{id:13007,name:'Apple AirPods Pro 2nd Gen (USB-C)',cond:'Brand New',price:2800000,priceRange:'UGX 2,800,000',specs:'ANC Earbuds',series:'ANC Earbuds',badge:'new',waMsg:'Apple AirPods Pro 2nd Gen (USB-C) Brand New - UGX 2,800,000'},
-{id:13008,name:'Apple AirPods Pro 2nd Gen (USB-C)',cond:'UK Used',price:2000000,priceRange:'UGX 2,000,000',specs:'ANC Earbuds',series:'ANC Earbuds',badge:'used',waMsg:'Apple AirPods Pro 2nd Gen (USB-C) UK Used - UGX 2,000,000'},
-{id:13009,name:'Apple AirPods Max (USB-C)',cond:'Brand New',price:4500000,priceRange:'UGX 4,500,000',specs:'Headphones',series:'Headphones',badge:'new',waMsg:'Apple AirPods Max (USB-C) Brand New - UGX 4,500,000'},
-{id:13010,name:'Apple AirPods Max (USB-C)',cond:'UK Used',price:3200000,priceRange:'UGX 3,200,000',specs:'Headphones',series:'Headphones',badge:'used',waMsg:'Apple AirPods Max (USB-C) UK Used - UGX 3,200,000'},
-{id:13011,name:'Samsung Galaxy Buds2',cond:'Brand New',price:1300000,priceRange:'UGX 1,300,000',specs:'Earbuds',series:'Earbuds',badge:'new',waMsg:'Samsung Galaxy Buds2 Brand New - UGX 1,300,000'},
-{id:13012,name:'Samsung Galaxy Buds2',cond:'UK Used',price:700000,priceRange:'UGX 700,000',specs:'Earbuds',series:'Earbuds',badge:'used',waMsg:'Samsung Galaxy Buds2 UK Used - UGX 700,000'},
-{id:13013,name:'Samsung Galaxy Buds2 Pro',cond:'Brand New',price:1800000,priceRange:'UGX 1,800,000',specs:'ANC Earbuds',series:'ANC Earbuds',badge:'new',waMsg:'Samsung Galaxy Buds2 Pro Brand New - UGX 1,800,000'},
-{id:13014,name:'Samsung Galaxy Buds2 Pro',cond:'UK Used',price:1100000,priceRange:'UGX 1,100,000',specs:'ANC Earbuds',series:'ANC Earbuds',badge:'used',waMsg:'Samsung Galaxy Buds2 Pro UK Used - UGX 1,100,000'},
-{id:13015,name:'Samsung Galaxy Buds FE',cond:'Brand New',price:900000,priceRange:'UGX 900,000',specs:'Earbuds',series:'Earbuds',badge:'new',waMsg:'Samsung Galaxy Buds FE Brand New - UGX 900,000'},
-{id:13016,name:'Samsung Galaxy Buds FE',cond:'UK Used',price:600000,priceRange:'UGX 600,000',specs:'Earbuds',series:'Earbuds',badge:'used',waMsg:'Samsung Galaxy Buds FE UK Used - UGX 600,000'},
-{id:13017,name:'Samsung Galaxy Buds3 Pro',cond:'Brand New',price:2300000,priceRange:'UGX 2,300,000',specs:'ANC Earbuds',series:'ANC Earbuds',badge:'new',waMsg:'Samsung Galaxy Buds3 Pro Brand New - UGX 2,300,000'},
-{id:13018,name:'Samsung Galaxy Buds3 Pro',cond:'UK Used',price:1700000,priceRange:'UGX 1,700,000',specs:'ANC Earbuds',series:'ANC Earbuds',badge:'used',waMsg:'Samsung Galaxy Buds3 Pro UK Used - UGX 1,700,000'},
-{id:13019,name:'JBL JBL Flip 6',cond:'Brand New',price:800000,priceRange:'UGX 800,000',specs:'Portable Speaker',series:'Portable Speaker',badge:'new',waMsg:'JBL JBL Flip 6 Brand New - UGX 800,000'},
-{id:13020,name:'JBL JBL Flip 6',cond:'UK Used',price:550000,priceRange:'UGX 550,000',specs:'Portable Speaker',series:'Portable Speaker',badge:'used',waMsg:'JBL JBL Flip 6 UK Used - UGX 550,000'},
-{id:13021,name:'JBL JBL Charge 5',cond:'Brand New',price:1200000,priceRange:'UGX 1,200,000',specs:'Portable Speaker',series:'Portable Speaker',badge:'new',waMsg:'JBL JBL Charge 5 Brand New - UGX 1,200,000'},
-{id:13022,name:'JBL JBL Charge 5',cond:'UK Used',price:800000,priceRange:'UGX 800,000',specs:'Portable Speaker',series:'Portable Speaker',badge:'used',waMsg:'JBL JBL Charge 5 UK Used - UGX 800,000'},
-{id:13023,name:'JBL JBL Xtreme 3',cond:'Brand New',price:2000000,priceRange:'UGX 2,000,000',specs:'Large Portable Speaker',series:'Large Portable Speaker',badge:'new',waMsg:'JBL JBL Xtreme 3 Brand New - UGX 2,000,000'},
-{id:13024,name:'JBL JBL Xtreme 3',cond:'UK Used',price:1400000,priceRange:'UGX 1,400,000',specs:'Large Portable Speaker',series:'Large Portable Speaker',badge:'used',waMsg:'JBL JBL Xtreme 3 UK Used - UGX 1,400,000'},
-{id:13025,name:'JBL JBL PartyBox 310',cond:'Brand New',price:3500000,priceRange:'UGX 3,500,000',specs:'Party Speaker',series:'Party Speaker',badge:'new',waMsg:'JBL JBL PartyBox 310 Brand New - UGX 3,500,000'},
-{id:13026,name:'JBL JBL PartyBox 310',cond:'UK Used',price:2500000,priceRange:'UGX 2,500,000',specs:'Party Speaker',series:'Party Speaker',badge:'used',waMsg:'JBL JBL PartyBox 310 UK Used - UGX 2,500,000'},
-{id:13027,name:'JBL JBL PartyBox 710',cond:'Brand New',price:7000000,priceRange:'UGX 7,000,000',specs:'Party Speaker',series:'Party Speaker',badge:'new',waMsg:'JBL JBL PartyBox 710 Brand New - UGX 7,000,000'},
-{id:13028,name:'JBL JBL PartyBox 710',cond:'UK Used',price:5000000,priceRange:'UGX 5,000,000',specs:'Party Speaker',series:'Party Speaker',badge:'used',waMsg:'JBL JBL PartyBox 710 UK Used - UGX 5,000,000'},
-{id:13029,name:'JBL JBL Tune Buds',cond:'Brand New',price:350000,priceRange:'UGX 350,000',specs:'ANC Earbuds',series:'ANC Earbuds',badge:'new',waMsg:'JBL JBL Tune Buds Brand New - UGX 350,000'},
-{id:13030,name:'JBL JBL Tune Buds',cond:'UK Used',price:250000,priceRange:'UGX 250,000',specs:'ANC Earbuds',series:'ANC Earbuds',badge:'used',waMsg:'JBL JBL Tune Buds UK Used - UGX 250,000'},
-{id:13031,name:'JBL JBL Tour One',cond:'Brand New',price:1200000,priceRange:'UGX 1,200,000',specs:'Headphones',series:'Headphones',badge:'new',waMsg:'JBL JBL Tour One Brand New - UGX 1,200,000'},
-{id:13032,name:'JBL JBL Tour One',cond:'UK Used',price:800000,priceRange:'UGX 800,000',specs:'Headphones',series:'Headphones',badge:'used',waMsg:'JBL JBL Tour One UK Used - UGX 800,000'},
-{id:13033,name:'Sony Sony WF-1000XM5',cond:'Brand New',price:1300000,priceRange:'UGX 1,300,000',specs:'Wireless Earbuds',series:'Wireless Earbuds',badge:'new',waMsg:'Sony Sony WF-1000XM5 Brand New - UGX 1,300,000'},
-{id:13034,name:'Sony Sony WF-1000XM5',cond:'UK Used',price:900000,priceRange:'UGX 900,000',specs:'Wireless Earbuds',series:'Wireless Earbuds',badge:'used',waMsg:'Sony Sony WF-1000XM5 UK Used - UGX 900,000'},
-{id:13035,name:'Sony Sony WH-1000XM4',cond:'Brand New',price:1200000,priceRange:'UGX 1,200,000',specs:'Headphones',series:'Headphones',badge:'new',waMsg:'Sony Sony WH-1000XM4 Brand New - UGX 1,200,000'},
-{id:13036,name:'Sony Sony WH-1000XM4',cond:'UK Used',price:800000,priceRange:'UGX 800,000',specs:'Headphones',series:'Headphones',badge:'used',waMsg:'Sony Sony WH-1000XM4 UK Used - UGX 800,000'},
-{id:13037,name:'Sony Sony WH-1000XM5',cond:'Brand New',price:1700000,priceRange:'UGX 1,700,000',specs:'Headphones',series:'Headphones',badge:'new',waMsg:'Sony Sony WH-1000XM5 Brand New - UGX 1,700,000'},
-{id:13038,name:'Sony Sony WH-1000XM5',cond:'UK Used',price:1200000,priceRange:'UGX 1,200,000',specs:'Headphones',series:'Headphones',badge:'used',waMsg:'Sony Sony WH-1000XM5 UK Used - UGX 1,200,000'},
-{id:13039,name:'Anker Soundcore Motion+',cond:'Brand New',price:500000,priceRange:'UGX 500,000',specs:'Bluetooth Speaker',series:'Bluetooth Speaker',badge:'new',waMsg:'Anker Soundcore Motion+ Brand New - UGX 500,000'},
-{id:13040,name:'Anker Soundcore Boom 2',cond:'Brand New',price:1000000,priceRange:'UGX 1,000,000',specs:'Bluetooth Speaker',series:'Bluetooth Speaker',badge:'new',waMsg:'Anker Soundcore Boom 2 Brand New - UGX 1,000,000'},
-{id:13041,name:'Oraimo Oraimo Party Speaker',cond:'Brand New',price:500000,priceRange:'UGX 500,000',specs:'Portable Speaker',series:'Portable Speaker',badge:'new',waMsg:'Oraimo Oraimo Party Speaker Brand New - UGX 500,000'}
-];
+<script type="module">
+import { fetchProducts } from './assets/js/supabase.js';
+import { renderProductGrid } from './assets/js/products.js';
 
 const grid = document.getElementById('productsGrid');
 const countEl = document.getElementById('resultsCount');
 const cntAll = document.getElementById('cnt-all');
-cntAll.textContent = PRODUCTS.length;
 
+let ALL_PRODUCTS = [];
 let condFilter = 'all';
-let seriesFilter = 'all';
+let brandFilter = 'all';
 let sortMode = 'default';
 
-function fmtUGX(n){ return 'UGX ' + n.toLocaleString('en-US'); }
-
-function render(){
-  let list = PRODUCTS.filter(p => (condFilter==='all'||p.cond===condFilter) && (seriesFilter==='all'||p.series===seriesFilter));
-  if(sortMode==='low') list = list.slice().sort((a,b)=>a.price-b.price);
-  if(sortMode==='high') list = list.slice().sort((a,b)=>b.price-a.price);
-  countEl.textContent = list.length + ' phones found';
-  grid.innerHTML = list.map(p => `
-    <div class="prod-card">
-      <span class="prod-card-badge badge-${p.badge}">${p.cond}</span>
-      <div class="prod-img-wrap"><span class="prod-img-placeholder">🎧</span></div>
-      <div class="prod-body">
-        <div class="prod-series">${p.series}</div>
-        <div class="prod-name">${p.name}</div>
-        <div class="prod-specs">${p.specs}</div>
-        <div class="prod-price">${p.priceRange}</div>
-        <a class="prod-btn-wa" target="_blank" href="https://wa.me/256756922058?text=${encodeURIComponent('Hello, I want to buy: ' + p.waMsg)}">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          Ask on WhatsApp
-        </a>
-      </div>
-    </div>
-  `).join('');
+function applyFiltersAndRender(){
+  let list = ALL_PRODUCTS.filter(p =>
+    (condFilter === 'all' || p.condition === condFilter) &&
+    (brandFilter === 'all' || p.brand === brandFilter)
+  );
+  if (sortMode === 'low')  list = list.slice().sort((a, b) => a.price - b.price);
+  if (sortMode === 'high') list = list.slice().sort((a, b) => b.price - a.price);
+  countEl.textContent = list.length + ' items found';
+  renderProductGrid(grid, list);
 }
 
-document.querySelectorAll('.filter-btn').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+async function init(){
+  grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text3);">Loading Audio…</div>';
+  ALL_PRODUCTS = await fetchProducts({ category: 'Audio' });
+  cntAll.textContent = ALL_PRODUCTS.length;
+  applyFiltersAndRender();
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     condFilter = btn.dataset.cond;
-    render();
+    applyFiltersAndRender();
   });
 });
-document.getElementById('seriesSelect').addEventListener('change', e=>{ seriesFilter = e.target.value; render(); });
-document.getElementById('sortSelect').addEventListener('change', e=>{ sortMode = e.target.value; render(); });
+document.getElementById('brandSelect').addEventListener('change', e => { brandFilter = e.target.value; applyFiltersAndRender(); });
+document.getElementById('sortSelect').addEventListener('change', e => { sortMode = e.target.value; applyFiltersAndRender(); });
 
-render();
+init();
 </script>
 </body>
 </html>
