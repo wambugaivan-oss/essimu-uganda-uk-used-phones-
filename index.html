@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Essimu Uganda – Phones, Laptops, TVs & Accessories | Kampala</title>
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicon/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/assets/img/favicon/favicon-48x48.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicon/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0d0d0f">
 <meta name="description" content="Buy brand new & UK used phones, laptops, TVs and accessories in Kampala. Samsung, iPhone, Google Pixel, Oppo, Redmi, Tecno, Infinix, itel, Nokia & more. Repairs, wholesale and fast WhatsApp support.">
 <meta name="keywords" content="UK used phones Uganda, UK used phones Kampala, brand new phones Uganda, cheap smartphones Kampala, affordable phones Uganda, Samsung phones Uganda, iPhones Uganda, Google Pixel phones Uganda, Oppo phones Uganda, Redmi phones Uganda, Xiaomi phones Uganda, Tecno phones Uganda, Infinix phones Uganda, itel phones Uganda, Nokia phones Uganda, phone accessories Uganda, phone repairs Kampala, laptops Uganda, TVs Uganda, smartwatches Uganda, earbuds Uganda, wholesale phones Uganda, wholesale electronics Uganda, Essimu Uganda">
 <meta name="robots" content="index, follow">
@@ -59,8 +66,12 @@ button{font-family:var(--font-body);cursor:pointer;}
 nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 5%;background:rgba(13,13,15,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:background .3s;}
 [data-theme="light"] nav{background:rgba(248,248,252,.9);}
 .nav-inner{display:flex;align-items:center;justify-content:space-between;height:68px;gap:20px;}
-.nav-logo{font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--text);letter-spacing:-.3px;flex-shrink:0;}
-.nav-logo span{color:var(--blue);}
+.nav-logo{display:flex;align-items:center;flex-shrink:0;}
+.nav-logo img{display:none;height:48px;width:auto;object-fit:contain;}
+/* Dark navbar (default/dark theme) needs the white/gold lockup; light navbar needs the navy/gold lockup. */
+html[data-theme="dark"] .nav-logo img.logo-on-dark,
+html:not([data-theme]) .nav-logo img.logo-on-dark{display:block;}
+html[data-theme="light"] .nav-logo img.logo-on-light{display:block;}
 .nav-search{flex:1;max-width:360px;position:relative;}
 .nav-search input{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:9px 16px 9px 38px;font-family:var(--font-body);font-size:.85rem;color:var(--text);outline:none;transition:border-color .2s;}
 .nav-search input:focus{border-color:var(--blue);}
@@ -265,8 +276,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 5%;background:rgb
 [data-theme="dark"] .map-wrap iframe{filter:invert(1) hue-rotate(180deg);}
 footer{background:var(--bg2);border-top:1px solid var(--border);padding:60px 6% 28px;}
 .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:36px;padding-bottom:40px;border-bottom:1px solid var(--border);}
-.footer-brand{font-family:var(--font-display);font-size:1.3rem;font-weight:800;margin-bottom:12px;}
-.footer-brand span{color:var(--blue);}
+.footer-brand{display:flex;margin-bottom:14px;}
+.footer-brand img{display:none;height:52px;width:auto;object-fit:contain;}
+/* footer background is var(--bg2) — dark in dark theme, light in light theme — same logic as the navbar. */
+html[data-theme="dark"] .footer-brand img.logo-on-dark,
+html:not([data-theme]) .footer-brand img.logo-on-dark{display:block;}
+html[data-theme="light"] .footer-brand img.logo-on-light{display:block;}
 .footer-tagline{font-size:.82rem;color:var(--text3);line-height:1.6;max-width:240px;}
 .footer-col-title{font-size:.68rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:16px;}
 .footer-col a{display:block;font-size:.82rem;color:var(--text2);margin-bottom:9px;transition:color .2s;}
@@ -370,7 +385,10 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:60px 6% 
 
 <nav id="mainNav">
   <div class="nav-inner">
-    <a href="#" class="nav-logo"><span>Essimu</span> Uganda</a>
+    <a href="#" class="nav-logo" aria-label="Essimu Uganda home">
+      <img class="logo-on-dark" src="assets/img/brand/essimu-uganda-logo-white-gold.png" alt="Essimu Uganda – Technology, Made Accessible" width="152" height="48">
+      <img class="logo-on-light" src="assets/img/brand/essimu-uganda-logo-navy-gold.png" alt="Essimu Uganda – Technology, Made Accessible" width="152" height="48">
+    </a>
     <a href="hot-deals.html" style="background:linear-gradient(135deg,#ef4444,#f59e0b);color:#fff;font-size:.72rem;font-weight:700;padding:6px 12px;border-radius:100px;white-space:nowrap;flex-shrink:0;">🔥 Hot Deals</a>
     <div class="nav-search">
       <span class="search-icon">🔍</span>
@@ -619,7 +637,10 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:60px 6% 
 <footer>
   <div class="footer-grid">
     <div>
-      <div class="footer-brand"><span>Essimu</span> Uganda</div>
+      <div class="footer-brand">
+        <img class="logo-on-dark" src="assets/img/brand/essimu-uganda-logo-white-gold.png" alt="Essimu Uganda – Technology, Made Accessible" width="164" height="52" loading="lazy">
+        <img class="logo-on-light" src="assets/img/brand/essimu-uganda-logo-navy-gold.png" alt="Essimu Uganda – Technology, Made Accessible" width="164" height="52" loading="lazy">
+      </div>
       <p class="footer-tagline">Uganda's trusted source for brand new and UK used smartphones at affordable prices. Samsung, iPhone, Google Pixel and more. William Street, Kampala.</p>
       <div style="margin-top:18px">
         <a href="https://wa.me/256756922058?text=Hello%2C%20I%20want%20to%20buy%20a%20phone" class="nav-wa" target="_blank" style="display:inline-flex;padding:10px 18px;font-size:.8rem">
