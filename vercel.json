@@ -1,0 +1,8 @@
+{
+  "redirects": [
+    { "source": "/lg", "destination": "/lg/", "permanent": true }
+  ],
+  "rewrites": [
+    { "source": "/lg/", "destination": "/lg.html" }
+  ]
+}
