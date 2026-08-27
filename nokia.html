@@ -215,7 +215,7 @@ WhatsApp
 
 <script type="module">
 import { fetchProducts } from './assets/js/supabase.js';
-import { renderProductGrid } from './assets/js/products.js';
+import { renderProductGrid, injectProductSchema } from './assets/js/products.js';
 
 const grid = document.getElementById('productsGrid');
 const countEl = document.getElementById('resultsCount');
@@ -240,6 +240,7 @@ function applyFiltersAndRender(){
 async function init(){
   grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text3);">Loading Nokia phones…</div>';
   ALL_PRODUCTS = await fetchProducts({ brand: 'Nokia' });
+  injectProductSchema(ALL_PRODUCTS, document.querySelector('link[rel="canonical"]').href);
   cntAll.textContent = ALL_PRODUCTS.length;
   applyFiltersAndRender();
 }
