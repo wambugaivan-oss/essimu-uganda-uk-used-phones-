@@ -107,3 +107,80 @@ export function renderProductGrid(containerEl, products) {
 }
 
 export { fmtUGX, fmtPriceRange, buildWhatsAppLink, discountPercent, specsLine, BRAND_EMOJI, CATEGORY_EMOJI };
+
+// ============================================================
+// PRODUCT STRUCTURED DATA (Schema.org Product + Offer)
+//
+// Why this exists: Google Search Console's "Merchant Opportunities"
+// check requires Product/Offer structured data before it will treat
+// any page as Shopping-tab eligible. This generates it from the
+// exact same live Supabase rows already being rendered into cards —
+// no separate data source, so it can never drift from what's on
+// the page or what the admin dashboard shows.
+//
+// Deliberately conservative: a product is only included if it has
+// ALL of — a real photo (image_url), a real price, and is in stock.
+// Google requires `image` on every Product node; inventing a stock
+// photo or using the site logo as a placeholder is against Google's
+// Merchant policies and would risk a suspension, not just a warning.
+// Products still missing real photos are silently skipped rather
+// than shipped with a fake image.
+// ============================================================
+function conditionSchemaUrl(condition) {
+  return condition === 'Brand New'
+    ? 'https://schema.org/NewCondition'
+    : 'https://schema.org/UsedCondition';
+}
+
+function productToSchema(product, pageUrl) {
+  const node = {
+    '@type': 'Product',
+    name: `${product.brand} ${product.model}`.trim(),
+    image: product.image_url,
+    description: specsLine(product) || `${product.brand} ${product.model} (${product.condition}) — available at Essimu Uganda, William Street, Kampala.`,
+    brand: { '@type': 'Brand', name: product.brand },
+    itemCondition: conditionSchemaUrl(product.condition),
+    offers: {
+      '@type': 'Offer',
+      url: pageUrl,
+      priceCurrency: 'UGX',
+      price: String(product.price),
+      itemCondition: conditionSchemaUrl(product.condition),
+      availability: 'https://schema.org/InStock',
+      seller: { '@type': 'Organization', name: 'Essimu Uganda' },
+    },
+  };
+  if (product.id !== undefined && product.id !== null) {
+    node.sku = String(product.id);
+  }
+  return node;
+}
+
+// Call once per page, after fetchProducts() resolves, with the same
+// array that got rendered into cards. Injects a single <script
+// type="application/ld+json"> into <head> — it does not touch the
+// existing static Store/BreadcrumbList block already in the page.
+export function injectProductSchema(products, pageUrl) {
+  if (!Array.isArray(products) || !products.length) return;
+
+  const url = pageUrl || document.querySelector('link[rel="canonical"]')?.href || location.href;
+
+  const eligible = products.filter(p =>
+    p && p.image_url && p.price != null && p.stock !== 0
+  );
+  if (!eligible.length) return;
+
+  const graph = eligible.map(p => productToSchema(p, url));
+
+  // Guard against double-injection if a page ever calls this twice.
+  const existing = document.getElementById('product-schema-jsonld');
+  if (existing) existing.remove();
+
+  const script = document.createElement('script');
+  script.type = 'application/ld+json';
+  script.id = 'product-schema-jsonld';
+  script.textContent = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
+  document.head.appendChild(script);
+
+  return { total: products.length, eligible: eligible.length, skipped: products.length - eligible.length };
+}
