@@ -239,7 +239,7 @@ WhatsApp
 // database, simply repurposed as the "show on Hot Deals" switch.
 // ============================================================
 import { fetchProducts } from './assets/js/supabase.js';
-import { fmtUGX, buildWhatsAppLink, discountPercent, specsLine, BRAND_EMOJI, CATEGORY_EMOJI } from './assets/js/products.js';
+import { fmtUGX, buildWhatsAppLink, discountPercent, specsLine, BRAND_EMOJI, CATEGORY_EMOJI, injectProductSchema } from './assets/js/products.js';
 
 const contentEl = document.getElementById('dealsContent');
 const countEl = document.getElementById('resultsCount');
@@ -334,6 +334,7 @@ async function init() {
   // Single query against the existing products table — only rows
   // marked featured (the site's existing Hot Deal flag) come back.
   ALL_DEALS = await fetchProducts({ featured: true });
+  injectProductSchema(ALL_DEALS, document.querySelector('link[rel="canonical"]').href);
   render();
 }
 
