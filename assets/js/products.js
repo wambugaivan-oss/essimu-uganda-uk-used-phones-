@@ -77,9 +77,14 @@ function renderProductCard(product) {
     ? `<img src="${product.image_url}" alt="${product.brand} ${product.model}" loading="lazy" style="width:100%;height:100%;object-fit:cover;">`
     : `<span class="prod-img-placeholder">${emoji}</span>`;
   const outOfStock = product.stock === 0;
+  // Stable per-product anchor id, e.g. id="product-10088". This is what makes
+  // /samsung.html#product-10088 a genuinely unique, deep-linkable URL for this
+  // one specific product instead of every product on the page sharing an
+  // identical, indistinguishable page URL.
+  const anchorId = (product.id !== undefined && product.id !== null) ? ` id="product-${product.id}"` : '';
 
   return `
-    <div class="prod-card">
+    <div class="prod-card"${anchorId}>
       <span class="prod-card-badge ${badgeClass}">${product.condition}${outOfStock ? ' · Sold Out' : ''}</span>
       <div class="prod-img-wrap">${imageHtml}</div>
       <div class="prod-body">
@@ -96,6 +101,27 @@ function renderProductCard(product) {
   `;
 }
 
+// If the page was opened with a #product-<id> fragment (exactly what the
+// structured data below now points to for every eligible product), scroll
+// that specific card into view and draw the eye to it briefly. Pure visual
+// aid — does nothing if there's no matching hash, never throws if the id
+// doesn't exist (e.g. a stale/shared link to a product that was removed).
+function highlightProductFromHash() {
+  const hash = location.hash;
+  if (!hash || !hash.startsWith('#product-')) return;
+  const el = document.getElementById(hash.slice(1));
+  if (!el) return;
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  const prevTransition = el.style.transition;
+  const prevShadow = el.style.boxShadow;
+  el.style.transition = 'box-shadow .3s ease';
+  el.style.boxShadow = '0 0 0 3px #3b82f6, 0 8px 24px rgba(59,130,246,.35)';
+  setTimeout(() => {
+    el.style.boxShadow = prevShadow;
+    setTimeout(() => { el.style.transition = prevTransition; }, 320);
+  }, 2400);
+}
+
 // Renders a full grid into the given container element.
 export function renderProductGrid(containerEl, products) {
   if (!containerEl) return;
@@ -104,9 +130,10 @@ export function renderProductGrid(containerEl, products) {
     return;
   }
   containerEl.innerHTML = products.map(renderProductCard).join('');
+  highlightProductFromHash();
 }
 
-export { fmtUGX, fmtPriceRange, buildWhatsAppLink, discountPercent, specsLine, BRAND_EMOJI, CATEGORY_EMOJI };
+export { fmtUGX, fmtPriceRange, buildWhatsAppLink, discountPercent, specsLine, BRAND_EMOJI, CATEGORY_EMOJI, highlightProductFromHash };
 
 // ============================================================
 // PRODUCT STRUCTURED DATA (Schema.org Product + Offer)
@@ -132,17 +159,37 @@ function conditionSchemaUrl(condition) {
     : 'https://schema.org/UsedCondition';
 }
 
+// Builds the most specific honest URL available for a product:
+// - if it has a stable id, point at its own anchor on the category page
+//   (e.g. https://essimuuganda.site/samsung.html#product-10088), which
+//   highlightProductFromHash() above turns into a real, working, scroll-
+//   to-and-highlight deep link — not a fake/unused fragment.
+// - otherwise fall back to the plain category page URL.
+// This is not the same as a dedicated per-product page (the site doesn't
+// have those), but it is a genuinely unique, working, bookmarkable URL
+// per product rather than every product on the page sharing one identical
+// URL with no way to tell them apart.
+function productUrl(product, basePageUrl) {
+  const base = basePageUrl.split('#')[0];
+  if (product.id !== undefined && product.id !== null) {
+    return `${base}#product-${product.id}`;
+  }
+  return base;
+}
+
 function productToSchema(product, pageUrl) {
+  const url = productUrl(product, pageUrl);
   const node = {
     '@type': 'Product',
     name: `${product.brand} ${product.model}`.trim(),
+    url,
     image: product.image_url,
     description: specsLine(product) || `${product.brand} ${product.model} (${product.condition}) — available at Essimu Uganda, William Street, Kampala.`,
     brand: { '@type': 'Brand', name: product.brand },
     itemCondition: conditionSchemaUrl(product.condition),
     offers: {
       '@type': 'Offer',
-      url: pageUrl,
+      url,
       priceCurrency: 'UGX',
       price: String(product.price),
       itemCondition: conditionSchemaUrl(product.condition),
@@ -150,6 +197,13 @@ function productToSchema(product, pageUrl) {
       seller: { '@type': 'Organization', name: 'Essimu Uganda' },
     },
   };
+  // Deliberately NOT set: gtin/mpn (no real manufacturer identifiers on
+  // file — inventing these risks a Merchant Center suspension, not just
+  // a warning), aggregateRating/review (no genuine reviews collected),
+  // hasMerchantReturnPolicy (the site's real return policy exists as a
+  // PDF, not as structured terms I have verified figures for — adding
+  // this later once the exact window/conditions are confirmed is a
+  // legitimate follow-up, not something to guess at now).
   if (product.id !== undefined && product.id !== null) {
     node.sku = String(product.id);
   }
