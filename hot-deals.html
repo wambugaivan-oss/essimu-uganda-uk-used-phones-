@@ -239,7 +239,7 @@ WhatsApp
 // database, simply repurposed as the "show on Hot Deals" switch.
 // ============================================================
 import { fetchProducts } from './assets/js/supabase.js';
-import { fmtUGX, buildWhatsAppLink, discountPercent, specsLine, BRAND_EMOJI, CATEGORY_EMOJI, injectProductSchema } from './assets/js/products.js';
+import { fmtUGX, buildWhatsAppLink, discountPercent, specsLine, BRAND_EMOJI, CATEGORY_EMOJI, injectProductSchema, highlightProductFromHash } from './assets/js/products.js';
 
 const contentEl = document.getElementById('dealsContent');
 const countEl = document.getElementById('resultsCount');
@@ -279,7 +279,7 @@ function dealCardHtml(p) {
   const condClass = p.condition === 'Brand New' ? 'badge-new' : 'badge-used';
 
   return `
-    <div class="deal-card">
+    <div class="deal-card" id="product-${p.id}">
       ${pct ? `<span class="deal-badge-pct">-${pct}% OFF</span>` : ''}
       <span class="deal-badge-cond ${condClass}">${p.condition}${outOfStock ? ' · Sold Out' : ''}</span>
       <div class="deal-img-wrap">${imageHtml}</div>
@@ -327,6 +327,7 @@ function render() {
   } else {
     contentEl.innerHTML = `<div class="deals-grid">${list.map(dealCardHtml).join('')}</div>`;
   }
+  highlightProductFromHash();
 }
 
 async function init() {
