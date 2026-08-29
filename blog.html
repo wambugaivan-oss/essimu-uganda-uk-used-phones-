@@ -157,7 +157,7 @@ async function loadBlogGrid() {
   const grid = document.getElementById('blogGrid');
   const { data: posts, error } = await supabase
     .from('blog_posts')
-    .select('slug, title, tag, emoji, excerpt')
+    .select('slug, title, tag, emoji, excerpt, image_url')
     .eq('published', true)
     .order('created_at', { ascending: false });
 
@@ -172,7 +172,7 @@ async function loadBlogGrid() {
 
   grid.innerHTML = posts.map(p => `
     <a href="blog-post.html?slug=${p.slug}" class="blog-card">
-      <div class="blog-card-img">${p.emoji || '📱'}</div>
+      <div class="blog-card-img"${p.image_url ? ` style="background-image:url('${p.image_url}');background-size:cover;background-position:center;font-size:0;"` : ''}>${p.image_url ? '' : (p.emoji || '📱')}</div>
       <div class="blog-card-body">
         <div class="blog-card-tag">${p.tag || ''}</div>
         <div class="blog-card-title">${p.title}</div>
