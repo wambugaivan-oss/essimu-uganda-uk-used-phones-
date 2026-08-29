@@ -163,6 +163,8 @@ async function loadPost() {
     .eq('published', true)
     .single();
 
+  // (cover image rendered further below once post is confirmed)
+
   if (error || !post) {
     wrap.innerHTML = '<div class="loading-state">Article not found. <a href="blog.html" style="color:var(--blue);">← Back to Blog</a></div>';
     return;
@@ -197,6 +199,7 @@ async function loadPost() {
     <div class="article-tag">${post.tag || ''}</div>
     <h1>${post.title}</h1>
     <div class="article-meta">Essimu Uganda · Updated ${fmtDate(post.updated_at || post.created_at)}</div>
+    ${post.image_url ? `<img src="${post.image_url}" alt="${post.title}" style="width:100%;border-radius:14px;margin-bottom:24px;">` : ''}
     ${post.body_html || ''}
     <div class="cta-box">
       <h3>Have questions about a specific phone?</h3>
