@@ -243,7 +243,16 @@ tbody tr:hover{background:var(--surface2);}
     <div class="form-row">
       <label>Tag / Emoji</label>
       <input type="text" id="b_tag" placeholder="Buying Guide">
-      <input type="text" id="b_emoji" placeholder="📱">
+      <input type="text" id="b_emoji" placeholder="📱 (used if no cover image)">
+    </div>
+    <div class="form-row full">
+      <label>Cover Image (shown at top of article + blog list thumbnail)</label>
+      <div id="blogImagePreviewWrap" style="margin-bottom:8px;display:none;">
+        <img id="blogImagePreview" style="width:100%;max-height:180px;object-fit:cover;background:var(--surface2);border-radius:8px;">
+      </div>
+      <input type="file" id="b_image_file" accept="image/*">
+      <input type="hidden" id="b_image_url">
+      <span id="blogUploadStatus" style="font-size:.75rem;color:var(--text3);"></span>
     </div>
     <div class="form-row full">
       <label>Excerpt (shown on the blog list page)</label>
@@ -255,8 +264,13 @@ tbody tr:hover{background:var(--surface2);}
     </div>
     <div class="form-row full">
       <label>Article content (HTML)</label>
+      <div style="margin-bottom:8px;">
+        <input type="file" id="b_inline_image_file" accept="image/*" style="display:none;">
+        <button type="button" class="btn-outline" id="insertImageBtn" style="font-size:.78rem;padding:6px 12px;">🖼️ Insert Image Into Article</button>
+        <span id="inlineUploadStatus" style="font-size:.75rem;color:var(--text3);margin-left:8px;"></span>
+      </div>
       <textarea id="b_body_html" rows="12" placeholder="&lt;h2&gt;Section title&lt;/h2&gt;&lt;p&gt;Paragraph text...&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Point one&lt;/li&gt;&lt;/ul&gt;"></textarea>
-      <span class="field-hint">Use &lt;h2&gt; for section headings, &lt;p&gt; for paragraphs, &lt;ul&gt;&lt;li&gt; for bullet lists, &lt;strong&gt; for bold text.</span>
+      <span class="field-hint">Use &lt;h2&gt; for section headings, &lt;p&gt; for paragraphs, &lt;ul&gt;&lt;li&gt; for bullet lists, &lt;strong&gt; for bold text. Click "Insert Image" to add a photo at your cursor position.</span>
     </div>
 
     <div class="checkbox-row">
@@ -606,7 +620,7 @@ document.getElementById('blogStatusFilter').addEventListener('change', renderBlo
 
 // ---------- BLOG MODAL ----------
 const blogModalOverlay = document.getElementById('blogModalOverlay');
-const blogFields = ['id','title','slug','tag','emoji','excerpt','meta_description','body_html'];
+const blogFields = ['id','title','slug','tag','emoji','excerpt','meta_description','body_html','image_url'];
 
 function slugify(str) {
   return str.toLowerCase().trim()
@@ -625,8 +639,83 @@ function openBlogModal(post = null) {
     document.getElementById('b_emoji').value = '📱';
   }
   document.getElementById('b_published').checked = post ? !!post.published : true;
+  document.getElementById('b_image_file').value = '';
+  document.getElementById('inlineUploadStatus').textContent = '';
+  document.getElementById('blogUploadStatus').textContent = '';
+  const preview = document.getElementById('blogImagePreview');
+  const previewWrap = document.getElementById('blogImagePreviewWrap');
+  if (post && post.image_url) {
+    preview.src = post.image_url;
+    previewWrap.style.display = 'block';
+  } else {
+    previewWrap.style.display = 'none';
+  }
   blogModalOverlay.classList.add('open');
 }
+
+// ---------- COVER IMAGE UPLOAD ----------
+document.getElementById('b_image_file').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const statusEl = document.getElementById('blogUploadStatus');
+  statusEl.textContent = 'Uploading…';
+
+  const safeName = file.name.replace(/[^a-zA-Z0-9.\-]/g, '_');
+  const path = `blog/${Date.now()}_${safeName}`;
+
+  const { error: uploadError } = await supabase.storage
+    .from('product-images')
+    .upload(path, file, { upsert: false });
+
+  if (uploadError) {
+    statusEl.textContent = 'Upload failed: ' + uploadError.message;
+    return;
+  }
+
+  const { data } = supabase.storage.from('product-images').getPublicUrl(path);
+  document.getElementById('b_image_url').value = data.publicUrl;
+
+  const preview = document.getElementById('blogImagePreview');
+  preview.src = data.publicUrl;
+  document.getElementById('blogImagePreviewWrap').style.display = 'block';
+  statusEl.textContent = 'Uploaded ✓';
+});
+
+// ---------- INLINE IMAGE INSERT (into article body) ----------
+document.getElementById('insertImageBtn').addEventListener('click', () => {
+  document.getElementById('b_inline_image_file').click();
+});
+
+document.getElementById('b_inline_image_file').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const statusEl = document.getElementById('inlineUploadStatus');
+  statusEl.textContent = 'Uploading…';
+
+  const safeName = file.name.replace(/[^a-zA-Z0-9.\-]/g, '_');
+  const path = `blog/${Date.now()}_${safeName}`;
+
+  const { error: uploadError } = await supabase.storage
+    .from('product-images')
+    .upload(path, file, { upsert: false });
+
+  if (uploadError) {
+    statusEl.textContent = 'Upload failed: ' + uploadError.message;
+    return;
+  }
+
+  const { data } = supabase.storage.from('product-images').getPublicUrl(path);
+  const imgTag = `<img src="${data.publicUrl}" alt="" style="width:100%;border-radius:14px;margin:24px 0;">`;
+
+  const textarea = document.getElementById('b_body_html');
+  const cursorPos = textarea.selectionStart || textarea.value.length;
+  const before = textarea.value.substring(0, cursorPos);
+  const after = textarea.value.substring(cursorPos);
+  textarea.value = before + '\n' + imgTag + '\n' + after;
+
+  statusEl.textContent = 'Image inserted ✓';
+  e.target.value = '';
+});
 
 // Auto-fill slug from title only when adding a new post (not editing)
 document.getElementById('b_title').addEventListener('input', () => {
@@ -648,6 +737,7 @@ document.getElementById('blogModalSaveBtn').addEventListener('click', async () =
     slug: slugify(document.getElementById('b_slug').value.trim()),
     tag: document.getElementById('b_tag').value.trim() || null,
     emoji: document.getElementById('b_emoji').value.trim() || '📱',
+    image_url: document.getElementById('b_image_url').value.trim() || null,
     excerpt: document.getElementById('b_excerpt').value.trim() || null,
     meta_description: document.getElementById('b_meta_description').value.trim() || null,
     body_html: document.getElementById('b_body_html').value,
