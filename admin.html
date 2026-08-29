@@ -14,9 +14,10 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);}
-input,select,button{font-family:inherit;font-size:.9rem;}
-input,select{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:8px;outline:none;}
-input:focus,select:focus{border-color:var(--blue);}
+input,select,button,textarea{font-family:inherit;font-size:.9rem;}
+input,select,textarea{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:8px;outline:none;}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);}
+textarea{width:100%;resize:vertical;font-family:ui-monospace,monospace;font-size:.8rem;line-height:1.5;}
 button{cursor:pointer;border:none;border-radius:8px;padding:9px 16px;font-weight:600;}
 .btn-primary{background:var(--blue);color:white;}
 .btn-green{background:var(--green);color:white;}
@@ -38,6 +39,13 @@ header h1{font-size:1.1rem;}
 header .stats{font-size:.8rem;color:var(--text3);}
 main{padding:20px 5% 60px;max-width:1100px;margin:0 auto;}
 
+/* Tabs */
+.tabs{display:flex;gap:8px;margin-bottom:20px;border-bottom:1px solid var(--border);}
+.tab-btn{background:transparent;border:none;border-bottom:2px solid transparent;border-radius:0;padding:10px 4px;margin-right:20px;color:var(--text3);font-weight:600;}
+.tab-btn.active{color:var(--text);border-bottom-color:var(--blue);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
 .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;align-items:center;}
 .toolbar input, .toolbar select{flex:1;min-width:140px;}
 .toolbar button{flex-shrink:0;}
@@ -57,6 +65,7 @@ tbody tr:hover{background:var(--surface2);}
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto;}
 .modal-overlay.open{display:flex;}
 .modal{background:var(--surface);border-radius:14px;padding:24px;width:100%;max-width:480px;margin-top:40px;}
+.modal.modal-wide{max-width:640px;}
 .modal h2{font-size:1.1rem;margin-bottom:16px;}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
 .form-row.full{grid-template-columns:1fr;}
@@ -64,6 +73,7 @@ tbody tr:hover{background:var(--surface2);}
 .form-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px;}
 .checkbox-row{display:flex;gap:16px;margin:10px 0;}
 .checkbox-row label{display:flex;align-items:center;gap:6px;font-size:.85rem;color:var(--text2);}
+.field-hint{font-size:.72rem;color:var(--text3);margin-top:-4px;margin-bottom:6px;}
 
 .loading{text-align:center;padding:40px;color:var(--text3);}
 @media(max-width:700px){
@@ -99,19 +109,44 @@ tbody tr:hover{background:var(--surface2);}
   </header>
 
   <main>
-    <div class="toolbar">
-      <input type="text" id="searchInput" placeholder="Search brand or model...">
-      <select id="brandFilter"><option value="">All Brands</option></select>
-      <select id="statusFilter">
-        <option value="">All Status</option>
-        <option value="active">Active</option>
-        <option value="inactive">Inactive</option>
-      </select>
-      <button class="btn-green" id="addProductBtn">+ Add Product</button>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="products">Products</button>
+      <button class="tab-btn" data-tab="blog">Blog</button>
     </div>
 
-    <div id="tableWrap">
-      <div class="loading">Loading products…</div>
+    <!-- ============ PRODUCTS TAB ============ -->
+    <div class="tab-panel active" id="tab-products">
+      <div class="toolbar">
+        <input type="text" id="searchInput" placeholder="Search brand or model...">
+        <select id="brandFilter"><option value="">All Brands</option></select>
+        <select id="statusFilter">
+          <option value="">All Status</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+        <button class="btn-green" id="addProductBtn">+ Add Product</button>
+      </div>
+
+      <div id="tableWrap">
+        <div class="loading">Loading products…</div>
+      </div>
+    </div>
+
+    <!-- ============ BLOG TAB ============ -->
+    <div class="tab-panel" id="tab-blog">
+      <div class="toolbar">
+        <input type="text" id="blogSearchInput" placeholder="Search post title...">
+        <select id="blogStatusFilter">
+          <option value="">All Status</option>
+          <option value="published">Published</option>
+          <option value="draft">Draft</option>
+        </select>
+        <button class="btn-green" id="addPostBtn">+ New Post</button>
+      </div>
+
+      <div id="blogTableWrap">
+        <div class="loading">Loading posts…</div>
+      </div>
     </div>
   </main>
 </div>
@@ -190,6 +225,51 @@ tbody tr:hover{background:var(--surface2);}
   </div>
 </div>
 
+<!-- ===================== BLOG POST MODAL ===================== -->
+<div class="modal-overlay" id="blogModalOverlay">
+  <div class="modal modal-wide">
+    <h2 id="blogModalTitle">New Post</h2>
+    <input type="hidden" id="b_id">
+
+    <div class="form-row full">
+      <label>Title</label>
+      <input type="text" id="b_title" placeholder="How to Spot a Genuine UK Used Phone">
+    </div>
+    <div class="form-row full">
+      <label>URL slug</label>
+      <input type="text" id="b_slug" placeholder="spot-genuine-uk-used-phone">
+      <span class="field-hint">Auto-fills from title. This becomes blog-post.html?slug=your-slug — avoid spaces or symbols.</span>
+    </div>
+    <div class="form-row">
+      <label>Tag / Emoji</label>
+      <input type="text" id="b_tag" placeholder="Buying Guide">
+      <input type="text" id="b_emoji" placeholder="📱">
+    </div>
+    <div class="form-row full">
+      <label>Excerpt (shown on the blog list page)</label>
+      <input type="text" id="b_excerpt" placeholder="Short 1-2 sentence summary">
+    </div>
+    <div class="form-row full">
+      <label>Meta description (for Google search results)</label>
+      <input type="text" id="b_meta_description" placeholder="Short SEO description (optional — falls back to excerpt)">
+    </div>
+    <div class="form-row full">
+      <label>Article content (HTML)</label>
+      <textarea id="b_body_html" rows="12" placeholder="&lt;h2&gt;Section title&lt;/h2&gt;&lt;p&gt;Paragraph text...&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Point one&lt;/li&gt;&lt;/ul&gt;"></textarea>
+      <span class="field-hint">Use &lt;h2&gt; for section headings, &lt;p&gt; for paragraphs, &lt;ul&gt;&lt;li&gt; for bullet lists, &lt;strong&gt; for bold text.</span>
+    </div>
+
+    <div class="checkbox-row">
+      <label><input type="checkbox" id="b_published" checked> Published (visible on site)</label>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn-outline" id="blogModalCancelBtn">Cancel</button>
+      <button class="btn-primary" id="blogModalSaveBtn">Save</button>
+    </div>
+  </div>
+</div>
+
 <script type="module">
 import { supabase } from './assets/js/supabase.js';
 
@@ -198,6 +278,7 @@ const adminScreen = document.getElementById('adminScreen');
 const loginError  = document.getElementById('loginError');
 
 let ALL_PRODUCTS = [];
+let ALL_POSTS = [];
 
 // ---------- AUTH ----------
 async function checkSession() {
@@ -218,6 +299,7 @@ function showAdmin() {
   loginScreen.style.display = 'none';
   adminScreen.style.display = 'block';
   loadProducts();
+  loadPosts();
 }
 
 document.getElementById('loginBtn').addEventListener('click', async () => {
@@ -238,7 +320,19 @@ document.getElementById('logoutBtn').addEventListener('click', async () => {
   showLogin();
 });
 
-// ---------- LOAD & RENDER ----------
+// ---------- TABS ----------
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ============================================================
+// PRODUCTS
+// ============================================================
 async function loadProducts() {
   document.getElementById('tableWrap').innerHTML = '<div class="loading">Loading products…</div>';
   const { data, error } = await supabase
@@ -281,7 +375,7 @@ function renderTable() {
   });
 
   document.getElementById('statsText').textContent =
-    `${ALL_PRODUCTS.length} total · ${ALL_PRODUCTS.filter(p => p.active).length} active`;
+    `${ALL_PRODUCTS.length} products · ${ALL_POSTS.length} posts`;
 
   if (list.length === 0) {
     document.getElementById('tableWrap').innerHTML = '<div class="loading">No products match.</div>';
@@ -354,7 +448,6 @@ document.getElementById('f_image_file').addEventListener('change', async (e) => 
   const statusEl = document.getElementById('uploadStatus');
   statusEl.textContent = 'Uploading…';
 
-  // filename: timestamp + sanitized original name, keeps them unique
   const safeName = file.name.replace(/[^a-zA-Z0-9.\-]/g, '_');
   const path = `${Date.now()}_${safeName}`;
 
@@ -425,7 +518,6 @@ document.getElementById('modalSaveBtn').addEventListener('click', async () => {
   loadProducts();
 });
 
-// ---------- ROW ACTIONS (exposed globally for inline onclick) ----------
 window.editProduct = (id) => {
   const product = ALL_PRODUCTS.find(p => p.id === id);
   if (product) openModal(product);
@@ -446,6 +538,163 @@ window.deleteProduct = async (id) => {
   const { error } = await supabase.from('products').delete().eq('id', id);
   if (error) { alert('Error: ' + error.message); return; }
   loadProducts();
+};
+
+// ============================================================
+// BLOG
+// ============================================================
+async function loadPosts() {
+  document.getElementById('blogTableWrap').innerHTML = '<div class="loading">Loading posts…</div>';
+  const { data, error } = await supabase
+    .from('blog_posts')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    document.getElementById('blogTableWrap').innerHTML = `<div class="loading">Error loading posts: ${error.message}</div>`;
+    return;
+  }
+  ALL_POSTS = data;
+  renderBlogTable();
+  document.getElementById('statsText').textContent =
+    `${ALL_PRODUCTS.length} products · ${ALL_POSTS.length} posts`;
+}
+
+function renderBlogTable() {
+  const search = document.getElementById('blogSearchInput').value.toLowerCase();
+  const statusF = document.getElementById('blogStatusFilter').value;
+
+  let list = ALL_POSTS.filter(p => {
+    if (search && !p.title.toLowerCase().includes(search)) return false;
+    if (statusF === 'published' && !p.published) return false;
+    if (statusF === 'draft' && p.published) return false;
+    return true;
+  });
+
+  if (list.length === 0) {
+    document.getElementById('blogTableWrap').innerHTML = '<div class="loading">No posts match.</div>';
+    return;
+  }
+
+  document.getElementById('blogTableWrap').innerHTML = `
+    <table>
+      <thead><tr>
+        <th>Post</th><th>Tag</th><th>Status</th><th></th>
+      </tr></thead>
+      <tbody>
+        ${list.map(p => `
+          <tr>
+            <td data-label="Post">${p.emoji || ''} <strong>${p.title}</strong><br><span style="color:var(--text3);font-size:.75rem;">/${p.slug}</span></td>
+            <td data-label="Tag">${p.tag || ''}</td>
+            <td data-label="Status">${p.published ? '<span class="pill pill-new">Published</span>' : '<span class="pill pill-inactive">Draft</span>'}</td>
+            <td data-label="Actions">
+              <div class="row-actions">
+                <button class="btn-outline" onclick="window.editPost(${p.id})">Edit</button>
+                <button class="btn-outline" onclick="window.togglePublished(${p.id})">${p.published ? 'Unpublish' : 'Publish'}</button>
+                <button class="btn-red" onclick="window.deletePost(${p.id})">Delete</button>
+              </div>
+            </td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+document.getElementById('blogSearchInput').addEventListener('input', renderBlogTable);
+document.getElementById('blogStatusFilter').addEventListener('change', renderBlogTable);
+
+// ---------- BLOG MODAL ----------
+const blogModalOverlay = document.getElementById('blogModalOverlay');
+const blogFields = ['id','title','slug','tag','emoji','excerpt','meta_description','body_html'];
+
+function slugify(str) {
+  return str.toLowerCase().trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function openBlogModal(post = null) {
+  document.getElementById('blogModalTitle').textContent = post ? 'Edit Post' : 'New Post';
+  blogFields.forEach(f => {
+    const el = document.getElementById('b_' + f);
+    if (el) el.value = post && post[f] != null ? post[f] : '';
+  });
+  if (!post) {
+    document.getElementById('b_tag').value = 'Buying Guide';
+    document.getElementById('b_emoji').value = '📱';
+  }
+  document.getElementById('b_published').checked = post ? !!post.published : true;
+  blogModalOverlay.classList.add('open');
+}
+
+// Auto-fill slug from title only when adding a new post (not editing)
+document.getElementById('b_title').addEventListener('input', () => {
+  if (!document.getElementById('b_id').value) {
+    document.getElementById('b_slug').value = slugify(document.getElementById('b_title').value);
+  }
+});
+
+function closeBlogModal() { blogModalOverlay.classList.remove('open'); }
+
+document.getElementById('addPostBtn').addEventListener('click', () => openBlogModal());
+document.getElementById('blogModalCancelBtn').addEventListener('click', closeBlogModal);
+blogModalOverlay.addEventListener('click', e => { if (e.target === blogModalOverlay) closeBlogModal(); });
+
+document.getElementById('blogModalSaveBtn').addEventListener('click', async () => {
+  const id = document.getElementById('b_id').value;
+  const payload = {
+    title: document.getElementById('b_title').value.trim(),
+    slug: slugify(document.getElementById('b_slug').value.trim()),
+    tag: document.getElementById('b_tag').value.trim() || null,
+    emoji: document.getElementById('b_emoji').value.trim() || '📱',
+    excerpt: document.getElementById('b_excerpt').value.trim() || null,
+    meta_description: document.getElementById('b_meta_description').value.trim() || null,
+    body_html: document.getElementById('b_body_html').value,
+    published: document.getElementById('b_published').checked,
+    updated_at: new Date().toISOString()
+  };
+
+  if (!payload.title || !payload.slug) {
+    alert('Title and slug are required.');
+    return;
+  }
+
+  let error;
+  if (id) {
+    ({ error } = await supabase.from('blog_posts').update(payload).eq('id', id));
+  } else {
+    ({ error } = await supabase.from('blog_posts').insert(payload));
+  }
+
+  if (error) {
+    alert('Error saving: ' + error.message);
+    return;
+  }
+  closeBlogModal();
+  loadPosts();
+});
+
+window.editPost = (id) => {
+  const post = ALL_POSTS.find(p => p.id === id);
+  if (post) openBlogModal(post);
+};
+
+window.togglePublished = async (id) => {
+  const post = ALL_POSTS.find(p => p.id === id);
+  if (!post) return;
+  const { error } = await supabase.from('blog_posts').update({ published: !post.published }).eq('id', id);
+  if (error) { alert('Error: ' + error.message); return; }
+  loadPosts();
+};
+
+window.deletePost = async (id) => {
+  const post = ALL_POSTS.find(p => p.id === id);
+  if (!post) return;
+  if (!confirm(`Permanently delete "${post.title}"? This cannot be undone.`)) return;
+  const { error } = await supabase.from('blog_posts').delete().eq('id', id);
+  if (error) { alert('Error: ' + error.message); return; }
+  loadPosts();
 };
 
 // ---------- INIT ----------
